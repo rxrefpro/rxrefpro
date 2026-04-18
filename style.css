@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI';
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  color: white;
+}
+
+header {
+  text-align: center;
+  padding: 20px;
+}
+
+nav {
+  display: flex;
+  overflow-x: auto;
+  background: #020617;
+}
+
+nav button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  color: white;
+  font-weight: bold;
+}
+
+nav button:hover {
+  background: #2563eb;
+}
+
+.tab { display: none; padding: 15px; }
+.active { display: block; }
+
+.cards {
+  display: flex;
+  gap: 10px;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#drugList .drug {
+  background: rgba(255,255,255,0.08);
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#flashcard {
+  background: #1e293b;
+  padding: 40px;
+  text-align: center;
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+}
