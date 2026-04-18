@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RxRefPro</title>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0f172a;
+  color:white;
+}
+
+header {
+  padding:20px;
+  text-align:center;
+  background:linear-gradient(90deg,#2563eb,#06b6d4);
+  font-size:24px;
+  font-weight:bold;
+}
+
+nav {
+  display:flex;
+  justify-content:space-around;
+  background:#1e293b;
+  padding:10px;
+}
+
+nav button {
+  background:none;
+  border:none;
+  color:white;
+  font-size:16px;
+}
+
+.container {
+  padding:15px;
+}
+
+.card {
+  background:#1e293b;
+  padding:15px;
+  margin:10px 0;
+  border-radius:10px;
+}
+
+.search {
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  margin-bottom:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>RxRefPro 💊</header>
+
+<nav>
+  <button onclick="showTab('home')">Home</button>
+  <button onclick="showTab('drugs')">Drugs</button>
+  <button onclick="showTab('quiz')">Quiz</button>
+  <button onclick="showTab('antidotes')">Antidotes</button>
+</nav>
+
+<div class="container" id="home">
+  <h2>Welcome 👋</h2>
+  <div class="card">🔥 Study Streak: 3 days</div>
+  <div class="card">📊 Accuracy: 78%</div>
+</div>
+
+<div class="container" id="drugs" style="display:none">
+  <input class="search" placeholder="Search drugs..." onkeyup="searchDrug(this.value)">
+  <div id="drugList"></div>
+</div>
+
+<div class="container" id="quiz" style="display:none">
+  <h3>Question:</h3>
+  <div class="card" id="question"></div>
+  <button onclick="answer('a')">A</button>
+  <button onclick="answer('b')">B</button>
+</div>
+
+<div class="container" id="antidotes" style="display:none">
+  <div class="card">Paracetamol → N-acetylcysteine</div>
+  <div class="card">Opioid → Naloxone</div>
+  <div class="card">Benzodiazepine → Flumazenil</div>
+</div>
+
+<script>
+
+const drugs = [
+  {name:"Metformin", class:"Biguanide", use:"Diabetes"},
+  {name:"Atorvastatin", class:"Statin", use:"Cholesterol"},
+  {name:"Amlodipine", class:"CCB", use:"Hypertension"},
+  {name:"Salbutamol", class:"SABA", use:"Asthma"},
+];
+
+function showTab(tab){
+  document.querySelectorAll('.container').forEach(e=>e.style.display='none');
+  document.getElementById(tab).style.display='block';
+}
+
+function loadDrugs(list){
+  let html="";
+  list.forEach(d=>{
+    html += `<div class="card">
+      <b>${d.name}</b><br>
+      Class: ${d.class}<br>
+      Use: ${d.use}
+    </div>`;
+  });
+  document.getElementById("drugList").innerHTML = html;
+}
+
+function searchDrug(val){
+  let filtered = drugs.filter(d=>d.name.toLowerCase().includes(val.toLowerCase()));
+  loadDrugs(filtered);
+}
+
+loadDrugs(drugs);
+
+// Quiz
+let q = {
+  question:"Metformin MOA?",
+  correct:"a"
+};
+
+document.getElementById("question").innerText = q.question;
+
+function answer(ans){
+  if(ans === q.correct){
+    alert("Correct ✅");
+  } else {
+    alert("Wrong ❌");
+  }
+}
+
+</script>
+
+</body>
+</html>
