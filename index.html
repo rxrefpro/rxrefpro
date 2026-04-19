@@ -3,157 +3,2033 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RxRefPro</title>
-
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="RxRef Pro">
+<meta name="description" content="RxRef Pro — Pharmacy Study App for NAPLEX, PEBC, KAPS and all licensing exams. Drugs, Flashcards, Quiz, Interactions, Dosing.">
+<title>RxRef Pro — Pharmacy Exam Study App</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — Clean White + Monochrome
+   Fraunces (editorial serif) + DM Sans (clean)
+═══════════════════════════════════════════ */
+:root {
+  --bg: #fafafa;
+  --surface: #f0f0f0;
+  --card: #ffffff;
+  --border: #e8e8e8;
+  --border2: #d0d0d0;
+  --text: #0a0a0a;
+  --text2: #404040;
+  --muted: #909090;
+  --dim: #c8c8c8;
+
+  --accent: #0a0a0a;
+  --accent-bg: #f0f0f0;
+  --green: #1a7a4a;
+  --green-bg: #f0faf4;
+  --red: #c0392b;
+  --red-bg: #fdf5f4;
+  --yellow: #b8860b;
+  --yellow-bg: #fdfaf0;
+  --blue: #1a4a8a;
+  --blue-bg: #f0f4fa;
+  --purple: #5a2d8a;
+  --purple-bg: #f6f0fa;
+  --orange: #c05a10;
+  --orange-bg: #fdf5f0;
+
+  --nav-h: 60px;
+  --header-h: 56px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
 body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#0f172a;
-  color:white;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
 }
 
-header {
-  padding:20px;
-  text-align:center;
-  background:linear-gradient(90deg,#2563eb,#06b6d4);
-  font-size:24px;
-  font-weight:bold;
+/* ── HEADER ── */
+.app-header {
+  height: var(--header-h);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  max-width: 100%;
+}
+.logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+.logo sup {
+  font-size: .5rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  vertical-align: super;
+  color: var(--muted);
+  margin-left: 2px;
+}
+.header-right { display: flex; align-items: center; gap: 8px; }
+.streak-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--yellow-bg);
+  border: 1px solid #e8d48a;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--yellow);
+}
+.hdr-btn {
+  width: 34px; height: 34px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: .9rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.hdr-btn:hover { background: var(--border); }
+
+/* ── SUBHEADER (contextual) ── */
+.subheader {
+  flex-shrink: 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: none;
+}
+.subheader.visible { display: block; }
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+}
+.search-input-wrap {
+  flex: 1;
+  position: relative;
+}
+.search-input-wrap input {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .85rem;
+  color: var(--text);
+  padding: 8px 12px 8px 34px;
+  outline: none;
+  transition: border-color .15s;
+}
+.search-input-wrap input:focus { border-color: var(--text); }
+.search-input-wrap input::placeholder { color: var(--muted); }
+.search-icon {
+  position: absolute;
+  left: 10px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: .9rem;
+  pointer-events: none;
+}
+.chips-row {
+  display: flex;
+  gap: 6px;
+  padding: 0 14px 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chips-row::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .65rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.chip:hover { border-color: var(--text2); color: var(--text2); }
+.chip.active { background: var(--text); border-color: var(--text); color: #fff; }
+
+/* ── SCROLL AREA ── */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px 100px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+#content {
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-nav {
-  display:flex;
-  justify-content:space-around;
-  background:#1e293b;
-  padding:10px;
+/* ── DESKTOP GRID for drug cards ── */
+@media(min-width: 768px) {
+  .scroll-area { padding: 28px 40px 100px; }
+  #content { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+  #content > .drug-card { margin-bottom: 0; }
+  /* Non-card content should span full width */
+  #content > .empty-state,
+  #content > .dash-greeting,
+  #content > .dash-sub,
+  #content > .stats-grid,
+  #content > .streak-bar,
+  #content > .section-title,
+  #content > .quick-actions,
+  #content > .recent-list,
+  #content > .flash-wrap,
+  #content > .quiz-wrap,
+  #content > .ix-wrap,
+  #content > .bm-card,
+  #content > .admin-stats,
+  #content > .admin-form,
+  #content > .custom-list-lbl,
+  #content > .cdi {
+    grid-column: 1 / -1;
+  }
+}
+@media(min-width: 1024px) {
+  #content { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
 }
 
-nav button {
-  background:none;
-  border:none;
-  color:white;
-  font-size:16px;
+/* ══════════════════════════════════════
+   DRUG CARDS
+══════════════════════════════════════ */
+.drug-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: box-shadow .2s, border-color .2s;
+  animation: fadeUp .22s ease both;
+}
+.drug-card:hover { box-shadow: var(--shadow); }
+.drug-card.bookmarked { border-color: #d4b840; }
+.drug-card.custom { border-left: 3px solid var(--purple); }
+
+.dc-header {
+  padding: 14px 16px 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.dc-row1 { display: flex; justify-content: space-between; align-items: flex-start; }
+.dc-brand {
+  font-family: 'Fraunces', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+}
+.dc-actions { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px;
+  opacity: .4;
+  transition: opacity .15s, transform .15s;
+  line-height: 1;
+}
+.icon-btn.active, .icon-btn:hover { opacity: 1; }
+.icon-btn:active { transform: scale(1.2); }
+.dc-generic { font-size: .75rem; color: var(--green); margin-top: 3px; font-weight: 500; }
+.dc-tags { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+.tag {
+  font-size: .58rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+.tag-class { background: var(--surface); border-color: var(--border); color: var(--muted); }
+.tag-custom { background: var(--purple-bg); border-color: #c0a0d8; color: var(--purple); }
+.dc-chevron { font-size: .65rem; color: var(--muted); margin-top: 6px; text-align: right; }
+
+.dc-body { display: none; border-top: 1px solid var(--border); }
+.dc-body.open { display: block; }
+
+.dc-section {
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: .78rem;
+  line-height: 1.55;
+}
+.dc-section:last-of-type { border-bottom: none; }
+.dc-lbl {
+  font-size: .58rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  min-width: 50px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.dc-val { flex: 1; color: var(--text2); font-weight: 400; }
+.dc-val.moa { color: var(--blue); }
+.dc-val.ind { color: var(--green); }
+.dc-val.adr { color: var(--orange); }
+.dc-val.dose { color: var(--purple); }
+.dc-val.mem { color: var(--text2); font-style: italic; }
+
+.dc-footer {
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.dc-note {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .78rem;
+  color: var(--text);
+  padding: 8px 11px;
+  resize: none;
+  min-height: 52px;
+  outline: none;
+  transition: border-color .15s;
+  margin-bottom: 8px;
+}
+.dc-note:focus { border-color: var(--text); }
+.dc-note::placeholder { color: var(--muted); }
+.note-status { font-size: .6rem; color: var(--green); text-align: right; height: 12px; margin-bottom: 6px; }
+.dc-btns { display: flex; gap: 7px; flex-wrap: wrap; }
+.dc-btn {
+  flex: 1;
+  min-width: 70px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .65rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 7px 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: all .15s;
+}
+.dc-btn:hover { border-color: var(--text); color: var(--text); }
+.dc-btn.ok { border-color: var(--green); color: var(--green); }
+.dc-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+/* ══════════════════════════════════════
+   DASHBOARD / HOME
+══════════════════════════════════════ */
+.dash-greeting {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.dash-sub { font-size: .8rem; color: var(--muted); margin-bottom: 18px; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.stat-card .s-val {
+  font-family: 'Fraunces', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.stat-card .s-lbl { font-size: .68rem; color: var(--muted); font-weight: 500; }
+.stat-card.accent { background: var(--text); border-color: var(--text); }
+.stat-card.accent .s-val { color: #fff; }
+.stat-card.accent .s-lbl { color: rgba(255,255,255,.6); }
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  margin-top: 4px;
 }
 
-.container {
-  padding:15px;
+.streak-bar {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
-
-.card {
-  background:#1e293b;
-  padding:15px;
-  margin:10px 0;
-  border-radius:10px;
+.streak-days { display: flex; gap: 4px; flex: 1; }
+.streak-day {
+  flex: 1;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .52rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
 }
+.streak-day.done { background: var(--text); border-color: var(--text); color: #fff; }
+.streak-day.today { border-color: var(--yellow); color: var(--yellow); }
 
-.search {
-  width:100%;
-  padding:10px;
-  border-radius:8px;
-  border:none;
-  margin-bottom:10px;
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
 }
+.qa-btn {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: all .15s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.qa-btn:hover { box-shadow: var(--shadow); border-color: var(--border2); }
+.qa-icon { font-size: 1.4rem; }
+.qa-label { font-size: .78rem; font-weight: 600; color: var(--text); }
+.qa-sub { font-size: .65rem; color: var(--muted); }
 
+.recent-list { display: flex; flex-direction: column; gap: 8px; }
+.recent-item {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all .15s;
+}
+.recent-item:hover { box-shadow: var(--shadow); }
+.ri-brand { font-family: 'Fraunces', serif; font-size: .9rem; font-weight: 700; }
+.ri-generic { font-size: .68rem; color: var(--green); margin-top: 1px; }
+.ri-class { font-size: .6rem; color: var(--muted); }
+.ri-arrow { color: var(--muted); font-size: .8rem; }
+
+/* ══════════════════════════════════════
+   FLASHCARDS
+══════════════════════════════════════ */
+.flash-wrap { max-width: 400px; margin: 0 auto; }
+.flash-mode-btns { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin-bottom: 12px; }
+.fmode-btn {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .62rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 8px 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: all .15s;
+}
+.fmode-btn.active { background: var(--text); border-color: var(--text); color: #fff; }
+.flash-progress-bar { height: 3px; background: var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+.flash-progress-fill { height: 100%; background: var(--text); border-radius: 10px; transition: width .3s; }
+.flash-counter { font-size: .7rem; color: var(--muted); text-align: center; margin-bottom: 10px; }
+
+.flash-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 24px;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  margin-bottom: 12px;
+  transition: box-shadow .2s, transform .15s;
+  user-select: none;
+}
+.flash-card:active { transform: scale(.98); }
+.flash-card:hover { box-shadow: var(--shadow-md); }
+.flash-card.flipped { background: var(--text); border-color: var(--text); }
+.flash-side-lbl {
+  position: absolute;
+  top: 12px; left: 16px;
+  font-size: .56rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.flash-card.flipped .flash-side-lbl { color: rgba(255,255,255,.5); }
+.flash-front { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: var(--text); }
+.flash-card.flipped .flash-front { color: #fff; }
+.flash-back { font-size: .82rem; color: #fff; line-height: 1.6; font-weight: 400; }
+.flash-back-generic { font-size: .75rem; color: rgba(255,255,255,.7); margin-bottom: 6px; }
+.flash-hint-txt { font-size: .65rem; color: var(--muted); margin-top: 12px; }
+.flash-card.flipped .flash-hint-txt { color: rgba(255,255,255,.4); }
+.flash-nav { display: flex; gap: 8px; margin-bottom: 14px; }
+.flash-nav-btn {
+  flex: 1;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--text2);
+  padding: 11px;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+}
+.flash-nav-btn:hover { border-color: var(--text); }
+.flash-nav-btn.primary { background: var(--text); border-color: var(--text); color: #fff; }
+.flash-nav-btn.correct { background: var(--green); border-color: var(--green); color: #fff; }
+.flash-nav-btn.skip { border-style: dashed; }
+.flash-scores { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.fs-box { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
+.fs-box .fv { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 700; }
+.fs-box .fl { font-size: .58rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .08em; }
+
+/* ══════════════════════════════════════
+   QUIZ
+══════════════════════════════════════ */
+.quiz-wrap { max-width: 420px; margin: 0 auto; }
+.quiz-menu-header { text-align: center; padding: 10px 0 20px; }
+.quiz-menu-header h2 { font-family: 'Fraunces', serif; font-size: 1.7rem; font-weight: 900; margin-bottom: 6px; }
+.quiz-menu-header p { font-size: .78rem; color: var(--muted); line-height: 1.6; }
+.quiz-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.qm-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+}
+.qm-card:hover { box-shadow: var(--shadow); }
+.qm-card.active { border-color: var(--text); background: var(--text); }
+.qm-card.active .qm-name { color: #fff; }
+.qm-card.active .qm-desc { color: rgba(255,255,255,.6); }
+.qm-icon { font-size: 1.5rem; margin-bottom: 6px; }
+.qm-name { font-size: .82rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.qm-desc { font-size: .65rem; color: var(--muted); }
+.start-quiz-btn {
+  width: 100%;
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .9rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 14px;
+  cursor: pointer;
+  transition: opacity .15s;
+  letter-spacing: .02em;
+}
+.start-quiz-btn:active { opacity: .8; }
+
+.quiz-topbar { display: flex; gap: 8px; align-items: stretch; margin-bottom: 10px; }
+.qtop-box {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  text-align: center;
+  min-width: 54px;
+}
+.qtop-val { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700; }
+.qtop-lbl { font-size: .5rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.qtop-val.green { color: var(--green); }
+.qtop-val.red { color: var(--red); }
+.qtop-val.urgent { color: var(--red); animation: pulse .6s infinite; }
+.timer-box-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.q-progress-bar { height: 3px; background: var(--border); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+.q-progress-fill { height: 100%; background: var(--text); border-radius: 10px; transition: width .4s; }
+.quiz-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 16px 14px;
+  margin-bottom: 10px;
+}
+.q-cat { font-size: .58rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.q-txt { font-size: .92rem; font-weight: 500; line-height: 1.55; margin-bottom: 16px; color: var(--text); }
+.q-opts { display: flex; flex-direction: column; gap: 8px; }
+.q-opt {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem;
+  color: var(--text);
+  padding: 11px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all .15s;
+  font-weight: 400;
+}
+.q-opt:hover:not(:disabled) { border-color: var(--text); background: var(--bg); }
+.q-opt.correct { background: var(--green-bg); border-color: var(--green); color: var(--green); font-weight: 600; }
+.q-opt.wrong { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+.q-opt:disabled { cursor: default; }
+.q-feedback {
+  margin-top: 10px; padding: 10px 13px;
+  border-radius: var(--radius-sm);
+  font-size: .74rem; line-height: 1.6;
+  display: none;
+}
+.q-feedback.show { display: block; }
+.q-feedback.ok { background: var(--green-bg); border: 1px solid #a0d8b8; color: var(--green); }
+.q-feedback.bad { background: var(--red-bg); border: 1px solid #e0b0a8; color: var(--red); }
+.q-next {
+  width: 100%;
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 11px;
+  margin-top: 10px;
+  cursor: pointer;
+  display: none;
+}
+.q-next.show { display: block; }
+.quiz-done-wrap { text-align: center; padding: 20px 10px; }
+.done-circle {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: var(--text);
+  color: #fff;
+  font-family: 'Fraunces', serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.quiz-done-wrap h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+.quiz-done-wrap p { font-size: .8rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+.done-btn { background: var(--text); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600; color: #fff; padding: 12px 28px; cursor: pointer; margin: 4px; }
+.done-btn.outline { background: none; border: 1.5px solid var(--border); color: var(--text2); }
+
+/* ══════════════════════════════════════
+   INTERACTION CHECKER
+══════════════════════════════════════ */
+.ix-wrap { max-width: 420px; margin: 0 auto; }
+.ix-title { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+.ix-sub { font-size: .75rem; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+.ix-inputs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.ix-input-row { display: flex; gap: 8px; align-items: center; }
+.ix-input {
+  flex: 1;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem;
+  color: var(--text);
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color .15s;
+}
+.ix-input:focus { border-color: var(--text); }
+.ix-input::placeholder { color: var(--muted); }
+.ix-remove {
+  width: 30px; height: 30px;
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  font-size: .9rem;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.ix-remove:hover { border-color: var(--red); color: var(--red); }
+.add-drug-input-btn {
+  background: none;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  transition: all .15s;
+  margin-bottom: 12px;
+}
+.add-drug-input-btn:hover { border-color: var(--text); color: var(--text); }
+.check-ix-btn {
+  width: 100%;
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .85rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 12px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: opacity .15s;
+}
+.check-ix-btn:active { opacity: .8; }
+
+.ix-result-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  animation: fadeUp .2s ease both;
+}
+.ix-pair { font-size: .72rem; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.ix-severity {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.ix-severity.major { background: var(--red-bg); color: var(--red); border: 1px solid #e0b0a8; }
+.ix-severity.moderate { background: var(--yellow-bg); color: var(--yellow); border: 1px solid #e8d48a; }
+.ix-severity.minor { background: var(--green-bg); color: var(--green); border: 1px solid #a0d8b8; }
+.ix-severity.none { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+.ix-desc { font-size: .78rem; color: var(--text2); line-height: 1.6; }
+.ix-mgmt { font-size: .72rem; color: var(--blue); margin-top: 6px; line-height: 1.5; }
+
+/* ══════════════════════════════════════
+   BOOKMARKS
+══════════════════════════════════════ */
+.bm-card {
+  background: var(--card);
+  border: 1.5px solid #d4b840;
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: box-shadow .15s;
+}
+.bm-card:hover { box-shadow: var(--shadow); }
+.bm-brand { font-family: 'Fraunces', serif; font-size: .95rem; font-weight: 700; }
+.bm-generic { font-size: .68rem; color: var(--green); margin-top: 2px; font-weight: 500; }
+.bm-class { font-size: .6rem; color: var(--muted); margin-top: 3px; }
+.bm-remove {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: .65rem;
+  padding: 5px 9px;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+.bm-remove:hover { border-color: var(--red); color: var(--red); }
+
+/* ══════════════════════════════════════
+   ADMIN
+══════════════════════════════════════ */
+.admin-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+
+/* ── ADMIN PASSWORD LOCK ── */
+.admin-lock {
+  max-width: 400px;
+  margin: 60px auto;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px 32px;
+  text-align: center;
+}
+.admin-lock .lock-icon { font-size: 3rem; margin-bottom: 16px; }
+.admin-lock h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.4rem; font-weight: 700;
+  margin-bottom: 8px;
+}
+.admin-lock p { font-size: .82rem; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+.admin-lock input {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: var(--text);
+  padding: 12px 16px;
+  outline: none;
+  text-align: center;
+  letter-spacing: .2em;
+  margin-bottom: 12px;
+  transition: border-color .15s;
+}
+.admin-lock input:focus { border-color: var(--text); }
+.admin-lock input::placeholder { letter-spacing: normal; color: var(--muted); }
+.admin-lock-btn {
+  width: 100%;
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .88rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 12px;
+  cursor: pointer;
+  transition: opacity .15s;
+  margin-bottom: 10px;
+}
+.admin-lock-btn:active { opacity: .8; }
+.admin-lock-err {
+  font-size: .75rem;
+  color: var(--red);
+  margin-top: 8px;
+  display: none;
+  animation: fadeUp .2s ease;
+}
+.admin-lock-err.show { display: block; }
+.admin-hint {
+  font-size: .7rem;
+  color: var(--muted);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.ast { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
+.ast strong { display: block; font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 2px; }
+.ast span { font-size: .6rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .08em; }
+
+.add-new-btn {
+  width: 100%;
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 13px;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: opacity .15s;
+}
+.add-new-btn:active { opacity: .8; }
+
+.admin-form {
+  background: var(--card);
+  border: 2px solid var(--text);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.af-title {
+  font-family: 'Fraunces', serif;
+  font-size: .95rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.af-cancel {
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  font-family: 'DM Sans', sans-serif; font-size: .65rem; color: var(--muted);
+  padding: 3px 10px; cursor: pointer; transition: all .15s;
+}
+.af-cancel:hover { border-color: var(--red); color: var(--red); }
+.af-row { margin-bottom: 10px; }
+.af-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.af-lbl { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.af-input, .af-textarea, .af-select {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem;
+  color: var(--text);
+  padding: 8px 11px;
+  outline: none;
+  transition: border-color .15s;
+}
+.af-input:focus, .af-textarea:focus, .af-select:focus { border-color: var(--text); }
+.af-input::placeholder, .af-textarea::placeholder { color: var(--muted); }
+.af-textarea { resize: vertical; min-height: 52px; }
+.af-select option { background: var(--card); }
+.af-submit {
+  width: 100%;
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .82rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 11px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: opacity .15s;
+}
+.af-submit:active { opacity: .8; }
+.af-error { font-size: .65rem; color: var(--red); margin-top: 6px; display: none; }
+.af-error.show { display: block; }
+
+.custom-list-lbl { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.cdi {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-left: 3px solid var(--purple);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  margin-bottom: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.cdi-brand { font-family: 'Fraunces', serif; font-size: .9rem; font-weight: 700; }
+.cdi-generic { font-size: .65rem; color: var(--green); margin-top: 2px; }
+.cdi-class { font-size: .58rem; color: var(--muted); margin-top: 2px; }
+.cdi-btns { display: flex; gap: 5px; flex-shrink: 0; }
+.cdi-btn {
+  background: none; border: 1px solid var(--border); border-radius: 5px;
+  font-family: 'DM Sans', sans-serif; font-size: .6rem; color: var(--muted);
+  padding: 4px 9px; cursor: pointer; transition: all .15s;
+}
+.cdi-btn.edit:hover { border-color: var(--purple); color: var(--purple); }
+.cdi-btn.del:hover { border-color: var(--red); color: var(--red); }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  display: flex;
+  justify-content: center;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  box-shadow: 0 -2px 12px rgba(0,0,0,.06);
+}
+.bottom-nav > .nav-btn {
+  flex: 0 1 120px;
+  max-width: 120px;
+}
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background .15s;
+}
+.nav-btn:active { background: var(--surface); }
+.nb-icon { font-size: 1.2rem; line-height: 1; }
+.nb-lbl {
+  font-family: 'DM Sans', sans-serif;
+  font-size: .5rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .15s;
+}
+.nav-btn.active .nb-lbl { color: var(--text); }
+.nav-btn.active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 2px;
+  background: var(--text);
+  border-radius: 0 0 3px 3px;
+}
+.bm-badge {
+  position: absolute;
+  top: 8px; right: calc(50% - 16px);
+  background: #d4b840;
+  color: #fff;
+  font-size: .45rem;
+  font-weight: 700;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+.bm-badge.show { display: flex; }
+
+/* ── MODALS / OVERLAYS ── */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+}
+.overlay.open { display: flex; }
+.overlay-box {
+  background: var(--card);
+  border-radius: 16px 16px 12px 12px;
+  width: 100%;
+  max-width: 430px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideUp .25s ease;
+}
+.overlay-header {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.overlay-title { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; }
+.overlay-close {
+  background: var(--surface); border: none; border-radius: 50%;
+  width: 30px; height: 30px; font-size: .9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.overlay-body { padding: 16px 18px 20px; }
+
+/* ── MISC ── */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-state .es-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.empty-state p { font-size: .78rem; line-height: 1.7; }
+.disclaimer { font-size: .58rem; text-align: center; color: var(--muted); padding: 5px; background: var(--bg); }
+mark { background: #fff0a0; color: #806000; border-radius: 2px; padding: 0 1px; }
+
+@media(max-width: 767px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .quick-actions { grid-template-columns: 1fr 1fr; }
+  .scroll-area { padding: 14px 14px 90px; }
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
 </style>
 </head>
-
 <body>
 
-<header>RxRefPro 💊</header>
+<div class="app-header">
+  <div style="max-width:1100px;width:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 4px;">
+    <div class="logo">RxRef <sup>Pro</sup></div>
+    <div class="header-right">
+      <div class="streak-pill" id="streakPill">🔥 <span id="streakCount">0</span></div>
+      <button class="hdr-btn" id="searchToggleBtn" onclick="toggleGlobalSearch()" title="Search">🔍</button>
+    </div>
+  </div>
+</div>
 
-<nav>
-  <button onclick="showTab('home')">Home</button>
-  <button onclick="showTab('drugs')">Drugs</button>
-  <button onclick="showTab('quiz')">Quiz</button>
-  <button onclick="showTab('antidotes')">Antidotes</button>
+<div class="subheader" id="subheader">
+  <div class="search-row">
+    <div class="search-input-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="search" id="searchInput" placeholder="Search any drug, class, MOA…" autocomplete="off">
+    </div>
+  </div>
+  <div class="chips-row" id="chipsRow"></div>
+</div>
+
+<div class="scroll-area" id="scrollArea">
+  <div id="content"></div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="tab-home" onclick="showTab('home')">
+    <span class="nb-icon">🏠</span><span class="nb-lbl">Home</span>
+  </button>
+  <button class="nav-btn" id="tab-drugs" onclick="showTab('drugs')">
+    <span class="nb-icon">💊</span><span class="nb-lbl">Drugs</span>
+  </button>
+  <button class="nav-btn" id="tab-flash" onclick="showTab('flash')">
+    <span class="nb-icon">🃏</span><span class="nb-lbl">Flash</span>
+  </button>
+  <button class="nav-btn" id="tab-quiz" onclick="showTab('quiz')">
+    <span class="nb-icon">🧠</span><span class="nb-lbl">Exam</span>
+  </button>
+  <button class="nav-btn" id="tab-ix" onclick="showTab('ix')">
+    <span class="nb-icon">⚡</span><span class="nb-lbl">Check</span>
+  </button>
+  <button class="nav-btn" id="tab-saved" onclick="showTab('saved')">
+    <span class="nb-icon">⭐</span><span class="nb-lbl">Saved</span>
+    <span class="bm-badge" id="bmBadge"></span>
+  </button>
+  <button class="nav-btn" id="tab-admin" onclick="showTab('admin')">
+    <span class="nb-icon">⚙️</span><span class="nb-lbl">Admin</span>
+  </button>
 </nav>
 
-<div class="container" id="home">
-  <h2>Welcome 👋</h2>
-  <div class="card">🔥 Study Streak: 3 days</div>
-  <div class="card">📊 Accuracy: 78%</div>
-</div>
-
-<div class="container" id="drugs" style="display:none">
-  <input class="search" placeholder="Search drugs..." onkeyup="searchDrug(this.value)">
-  <div id="drugList"></div>
-</div>
-
-<div class="container" id="quiz" style="display:none">
-  <h3>Question:</h3>
-  <div class="card" id="question"></div>
-  <button onclick="answer('a')">A</button>
-  <button onclick="answer('b')">B</button>
-</div>
-
-<div class="container" id="antidotes" style="display:none">
-  <div class="card">Paracetamol → N-acetylcysteine</div>
-  <div class="card">Opioid → Naloxone</div>
-  <div class="card">Benzodiazepine → Flumazenil</div>
+<!-- Confirm overlay -->
+<div class="overlay" id="confirmOverlay">
+  <div class="overlay-box" style="border-radius:16px;">
+    <div class="overlay-header">
+      <div class="overlay-title">Confirm Delete</div>
+      <button class="overlay-close" onclick="closeOverlay('confirmOverlay')">✕</button>
+    </div>
+    <div class="overlay-body">
+      <p id="confirmMsg" style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:18px;"></p>
+      <div style="display:flex;gap:10px;">
+        <button onclick="confirmDeleteDrug()" style="flex:1;background:var(--red);border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:#fff;padding:11px;cursor:pointer;">Delete</button>
+        <button onclick="closeOverlay('confirmOverlay')" style="flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--text);padding:11px;cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-
-const drugs = [
-  {name:"Metformin", class:"Biguanide", use:"Diabetes"},
-  {name:"Atorvastatin", class:"Statin", use:"Cholesterol"},
-  {name:"Amlodipine", class:"CCB", use:"Hypertension"},
-  {name:"Salbutamol", class:"SABA", use:"Asthma"},
+// ══════════════════════════════════════════════════════════════
+// DRUG DATABASE — 100+ drugs with Mnemonic + Dosing + Renal
+// ══════════════════════════════════════════════════════════════
+const DRUGS = [
+  // ACE INHIBITORS
+  {brand:"Altace",generic:"ramipril",class:"ACE Inhibitor",moa:"Inhibits ACE → ↓ Ang II → vasodilation + ↓ aldosterone",side:"Dry cough (bradykinin↑), angioedema, ↑K⁺, hypotension",indication:"HTN, HF, post-MI, Diabetic nephropathy",dose:"HTN: 2.5–10mg OD; HF: 1.25–10mg OD/BID",renal:"↓ dose if CrCl <60; avoid if CrCl <30 (risk of hyperkalemia/AKI)",mnemonic:"'RAMP up the pressure' — Ramipril blocks the RAMP (ACE) to lower BP"},
+  {brand:"Zestril",generic:"lisinopril",class:"ACE Inhibitor",moa:"Blocks ACE → ↓ Ang II → vasodilation + ↓ Na⁺ retention",side:"Dry cough, ↑K⁺, hypotension, renal impairment",indication:"HTN, HF, Diabetic nephropathy",dose:"HTN: 10–40mg OD; HF: 5–40mg OD",renal:"Avoid CrCl <30; ↓ dose with CrCl 10–30",mnemonic:"LIPS-inopril — it'll make you want to stop talking (dry cough)"},
+  {brand:"Vasotec",generic:"enalapril",class:"ACE Inhibitor",moa:"Prodrug → enalaprilat; competitive ACE inhibition → ↓ Ang II",side:"Cough, angioedema, hypotension, ↑K⁺",indication:"HTN, Heart Failure",dose:"HTN: 5–40mg OD/BID; HF: 2.5–20mg BID",renal:"↓ dose CrCl <30; start 2.5mg",mnemonic:"ENA = Every Next Attempt — needs activation (prodrug)"},
+  // ARBs
+  {brand:"Cozaar",generic:"losartan",class:"ARB",moa:"Selective AT1 antagonist → blocks Ang II; URIC ACID ↓ (bonus)",side:"Dizziness, ↑K⁺, renal impairment; NO cough (vs ACEi)",indication:"HTN, Diabetic nephropathy (preferred), HF",dose:"HTN: 50–100mg OD; nephropathy: 50mg OD → 100mg",renal:"No dose adj needed; caution if severe renal impairment",mnemonic:"LOSARTAN = Loses sARTAN (cough) — only ARB with uricosuric effect"},
+  {brand:"Diovan",generic:"valsartan",class:"ARB",moa:"Selective AT1 blockade; no ACE inhibition → no cough",side:"Hypotension, ↑K⁺, headache, dizziness",indication:"HTN, Heart Failure, post-MI",dose:"HTN: 80–320mg OD; HF: 40–160mg BID",renal:"No dose adj for mild–mod; caution if severe",mnemonic:"VAL = Very Alternative (to ACEi) — same BP drop, no cough"},
+  {brand:"Atacand",generic:"candesartan",class:"ARB",moa:"Irreversible AT1 binding → sustained, long-acting BP reduction",side:"Dizziness, ↑K⁺, URIs, back pain",indication:"HTN, HF (proven mortality benefit)",dose:"HTN: 8–32mg OD; HF: 4–32mg OD",renal:"Caution in renal artery stenosis; no major adj needed",mnemonic:"CAN-desartan = CAN it stay longer? Yes — irreversible binding"},
+  // BETA BLOCKERS
+  {brand:"Tenormin",generic:"atenolol",class:"Beta Blocker",moa:"Selective β1 antagonist → ↓ HR, CO, renin; does NOT cross BBB well",side:"Bradycardia, fatigue, cold extremities, glucose masking",indication:"HTN, Angina, post-MI",dose:"HTN: 50–100mg OD; Angina: 50–200mg OD",renal:"↓ dose CrCl <35: use 25–50mg; CrCl <15: 25mg QOD",mnemonic:"ATENOLOL = A TENer for your heart — 10 beats less per minute"},
+  {brand:"Toprol-XL",generic:"metoprolol",class:"Beta Blocker",moa:"Cardioselective β1 blocker; XL = extended release → smoother HR control",side:"Fatigue, bradycardia, depression, glucose masking (less than propranolol)",indication:"HTN, HFrEF, Arrhythmia, post-MI",dose:"HTN: 50–200mg OD (XL); HF: start 12.5–25mg OD → titrate to 200mg",renal:"No dose adjustment needed",mnemonic:"METRO = METRO subway — stays on the CARDIAC (β1) line only"},
+  {brand:"Inderal",generic:"propranolol",class:"Beta Blocker",moa:"Non-selective β1 + β2 blockade → ↓ HR, CO, renin; crosses BBB → central effects",side:"Bronchospasm (β2!), fatigue, cold extremities, hypoglycemia masking",indication:"HTN, Angina, Migraine prophylaxis, Tremor, Anxiety (performance)",dose:"HTN: 80–320mg/day divided BID; Migraine: 80–240mg/day",renal:"No major adj; use caution in severe hepatic impairment",mnemonic:"PROPRANOLOL = PROPhylaxis for Rangy ANgina, bLOcks Like a wall"},
+  {brand:"Coreg",generic:"carvedilol",class:"Beta Blocker",moa:"β1 + β2 + α1 blockade → ↓ HR, preload & afterload; antioxidant properties",side:"Dizziness (α1 block → postural hypotension), fluid retention, fatigue",indication:"HFrEF (mortality benefit ★), HTN, post-MI LV dysfunction",dose:"HF: start 3.125mg BID → titrate q2wk to max 25mg BID",renal:"No dose adjustment",mnemonic:"CARVE-dilol = CARVEs all paths (β1+β2+α1) — triple threat"},
+  // STATINS
+  {brand:"Lipitor",generic:"atorvastatin",class:"Statin",moa:"Potent HMG-CoA reductase inhibitor → ↓ hepatic cholesterol → ↑ LDL receptors",side:"Myopathy (CK↑), ↑LFTs, rhabdomyolysis (rare), new-onset DM",indication:"Hyperlipidemia, Primary/secondary CVD prevention, post-ACS",dose:"CVD prevention: 40–80mg OD; Hyperlipidemia: 10–80mg OD",renal:"No dose adjustment (hepatically metabolized)",mnemonic:"ATORVA = A TORPOR for vessels — torpid (inhibited) cholesterol production"},
+  {brand:"Crestor",generic:"rosuvastatin",class:"Statin",moa:"Most potent statin; hydrophilic → hepatic selectivity → ↓ LDL 55–65%",side:"Myalgia, ↑LFTs, proteinuria/hematuria (high dose), DM risk",indication:"Hyperlipidemia, Highest CVD risk, Hypertriglyceridemia",dose:"5–40mg OD; start 5–10mg; Asian patients: start 5mg",renal:"↓ dose if CrCl <30: max 10mg; avoid 40mg dose",mnemonic:"ROSUvastatin = ROSE to the TOP — most potent LDL-lowering"},
+  {brand:"Zocor",generic:"simvastatin",class:"Statin",moa:"Prodrug → active acid form; inhibits HMG-CoA reductase in liver",side:"Myopathy (dose-related — 80mg dose BANNED due to myopathy risk), ↑LFTs",indication:"Hyperlipidemia, CVD risk reduction",dose:"10–40mg OD; max 40mg (80mg only if already on it safely >12mo)",renal:"↓ dose CrCl <30: start 5mg, max 10mg",mnemonic:"SIMvastatin = SIM card — SIMPLE but watch for MUSCLE signal"},
+  {brand:"Pravachol",generic:"pravastatin",class:"Statin",moa:"Hydrophilic; minimal CYP450 metabolism → fewest drug interactions",side:"Myalgia, headache, GI upset (best tolerated statin)",indication:"Hyperlipidemia, Transplant patients (safe with calcineurin inhibitors)",dose:"10–80mg OD at bedtime",renal:"Start 10mg OD if CrCl <30",mnemonic:"PRAVA = PRActical And Very Amiable — best tolerated, fewest interactions"},
+  // ANTIBIOTICS
+  {brand:"Amoxil",generic:"amoxicillin",class:"Antibiotic",moa:"Aminopenicillin; binds PBPs → inhibits cell wall cross-linking → bactericidal lysis",side:"Rash (maculopapular in mono!), diarrhea, nausea, anaphylaxis (rare)",indication:"RTIs, UTIs, H. pylori (triple therapy), Otitis media, Strep pharyngitis",dose:"RTIs: 500mg TID or 875mg BID × 5–10d; H. pylori: 1g BID × 14d",renal:"CrCl 10–30: 500mg BID; CrCl <10: 500mg OD",mnemonic:"AMOX = AMOeba eXterminator — kills cell wall bacteria"},
+  {brand:"Zithromax",generic:"azithromycin",class:"Antibiotic",moa:"Binds 50S ribosome → blocks peptide translocation → bacteriostatic",side:"GI upset (most common), QT prolongation, hepatotoxicity (rare), ototoxicity",indication:"CAP (Z-pack), Chlamydia (1g single dose), MAC prophylaxis in HIV",dose:"CAP: 500mg OD × 3d (Z-pack); Chlamydia: 1g single dose",renal:"No dose adjustment needed",mnemonic:"Z-PACK = Zaps Pathogens And Covers Klebsiella (not really) — 5-day pack"},
+  {brand:"Cipro",generic:"ciprofloxacin",class:"Antibiotic",moa:"Inhibits DNA gyrase (G−) + topoisomerase IV (G+) → DNA strand breaks → bactericidal",side:"Tendon rupture (BLACK BOX), QT prolongation, photosensitivity, C. diff, CNS effects",indication:"UTIs (uncomplicated & complicated), GI infections, Anthrax, Pseudomonas",dose:"UTI uncomplicated: 250mg BID × 3d; complicated: 500mg BID × 7–14d",renal:"CrCl 30–50: 50% dose; CrCl <30: 250–500mg q18-24h",mnemonic:"CIPRO = Cuts Intricate Prokaryotic Replication Operations — DNA destroyer"},
+  {brand:"Keflex",generic:"cephalexin",class:"Antibiotic",moa:"1st-gen cephalosporin; inhibits PBPs → cell wall lysis; excellent G+ (MSSA) coverage",side:"Diarrhea, rash (cross-reaction penicillin ~1%), nausea",indication:"Skin/soft tissue infections (MSSA), UTIs, Strep pharyngitis",dose:"500mg QID or 1g BID × 7–10d",renal:"CrCl 10–40: q8–12h; CrCl <10: q24h",mnemonic:"KEF-lex = KEY to FLEX against skin bugs — 1st gen = 1st line for MSSA skin"},
+  {brand:"Augmentin",generic:"amoxicillin-clavulanate",class:"Antibiotic",moa:"Amoxicillin (PBP inhibitor) + clavulanate (suicide β-lactamase inhibitor)",side:"Diarrhea (most common), cholestatic jaundice (especially in elderly men)",indication:"Sinusitis, Otitis media, Animal/human bites, LRTI",dose:"875/125mg BID × 5–7d (respiratory); 500/125mg TID for other infections",renal:"CrCl <30: 500/125mg BID (avoid 875mg formulation)",mnemonic:"AUG = AUGmented amoxicillin — β-lactamase SHIELD added"},
+  {brand:"Flagyl",generic:"metronidazole",class:"Antibiotic",moa:"Prodrug reduced by anaerobes → reactive nitroso radicals → DNA strand breaks",side:"Metallic taste, nausea, DISULFIRAM-LIKE reaction with alcohol, peripheral neuropathy (prolonged)",indication:"C. difficile (oral), BV, Trichomoniasis, H. pylori, Anaerobic infections",dose:"C. diff: 500mg TID × 10–14d; BV: 500mg BID × 7d; Anaerobes: 500mg TID",renal:"No adjustment; reduce dose in severe hepatic impairment",mnemonic:"METRO-nidazole = METRO that only serves UNDERGROUND (anaerobes)"},
+  {brand:"Vancocin",generic:"vancomycin",class:"Antibiotic",moa:"Glycopeptide; binds D-Ala-D-Ala cell wall precursor → blocks transglycosylation",side:"Red Man Syndrome (infusion — RATE dependent, not allergy), nephrotoxicity, ototoxicity",indication:"MRSA (IV), C. difficile (oral — not absorbed), Serious G+ infections",dose:"MRSA: 15–20mg/kg q8–12h IV (target AUC:MIC 400–600); C. diff: 125mg PO QID",renal:"Heavily renally cleared: dose by AUC monitoring (TDM required)",mnemonic:"VANCO = VANQUISHES Cocci (only G+) — glycopeptide GUARD at the cell wall gate"},
+  {brand:"Rochephin",generic:"ceftriaxone",class:"Antibiotic",moa:"3rd-gen cephalosporin; PBP inhibitor; long t½ = 8h → once-daily dosing",side:"Biliary sludge (precipitates), diarrhea, rash, ↑LFTs",indication:"CAP (IV), Meningitis, Gonorrhea (first-line), Lyme disease, Sepsis",dose:"CAP: 1–2g OD IV; Meningitis: 2g BID IV; Gonorrhea: 500mg IM single dose",renal:"No dose adjustment (biliary + renal dual excretion)",mnemonic:"CEFTRI = CHIEF TRI (3rd gen) — Long lasting because it's the CHIEF"},
+  // SSRIs
+  {brand:"Prozac",generic:"fluoxetine",class:"SSRI",moa:"Blocks SERT → ↑ synaptic serotonin; longest t½ (~4–6d + norfluoxetine active metabolite)",side:"Insomnia (activating), sexual dysfunction (delayed orgasm), nausea, weight change",indication:"MDD, OCD, Bulimia nervosa, Panic disorder, PMDD",dose:"MDD: 20mg OD morning (start); max 80mg OD; OCD: up to 80mg",renal:"No dose adjustment",mnemonic:"FLUoxetine = FLU-like start (nausea) but FLOWS longest (longest t½)"},
+  {brand:"Zoloft",generic:"sertraline",class:"SSRI",moa:"Potent SERT inhibitor; high serotonin selectivity; also weak DAT inhibition",side:"GI upset (diarrhea most common), sexual dysfunction, insomnia, weight gain",indication:"MDD, PTSD, OCD, Social anxiety disorder, Panic disorder, PMDD",dose:"MDD: 50mg OD → 200mg OD; PTSD: 25–200mg OD",renal:"No dose adjustment",mnemonic:"SERtraline = SERves Many — most versatile SSRI (most approved indications)"},
+  {brand:"Lexapro",generic:"escitalopram",class:"SSRI",moa:"S-enantiomer of citalopram; highest SERT selectivity → fewest drug interactions",side:"Nausea, insomnia, sexual dysfunction, QT prolongation at high doses",indication:"MDD, GAD (only SSRI approved for both)",dose:"10mg OD; max 20mg (10mg if elderly/hepatic impairment)",renal:"No dose adjustment",mnemonic:"ESCITAlopram = ESCAPEs side effects — cleanest SSRI profile"},
+  {brand:"Paxil",generic:"paroxetine",class:"SSRI",moa:"SERT + muscarinic + NE reuptake inhibition; shortest t½ → worst discontinuation syndrome",side:"Weight gain, sedation, sexual dysfunction (worst), anticholinergic effects, SEVERE discontinuation",indication:"MDD, Panic disorder, PTSD, Social phobia, OCD, Premenstrual dysphoric disorder",dose:"10–50mg OD; start low in elderly (10mg)",renal:"CrCl <30: start 10mg, max 40mg",mnemonic:"PAROXetine = PAROXysmal withdrawal — PARK it carefully (hardest to stop)"},
+  // SNRIs
+  {brand:"Effexor",generic:"venlafaxine",class:"SNRI",moa:"Dual SERT + NET inhibitor (NE at ≥150mg); DA reuptake at very high doses",side:"HTN (dose-dependent — check BP!), nausea, sweating, sexual dysfunction, discontinuation syndrome",indication:"MDD, GAD, Social anxiety, Panic disorder, Neuropathic pain",dose:"37.5–225mg/day; start 37.5mg; ≥150mg for full SNRI effect",renal:"CrCl 10–70: ↓ dose 25–50%; dialysis: ↓ 50%",mnemonic:"VENLAfaxine = VENLA-two (dual SERT+NET) — 'venlafaxine ventures into NE at higher doses'"},
+  {brand:"Cymbalta",generic:"duloxetine",class:"SNRI",moa:"Balanced SERT + NET inhibition at all doses; ↑ descending pain inhibitory pathways",side:"Nausea (most common start), dry mouth, hepatotoxicity (rare), ↑ BP",indication:"MDD, GAD, Diabetic neuropathic pain, Fibromyalgia, Chronic musculoskeletal pain",dose:"60mg OD (can split 30mg BID); max 120mg/day for pain",renal:"Avoid if CrCl <30 (accumulation of metabolites)",mnemonic:"DULoxetine = DUAL from the start — equal SERT+NET at ANY dose (unlike venlafaxine)"},
+  // PPIs
+  {brand:"Prilosec",generic:"omeprazole",class:"PPI",moa:"Prodrug → activated in acid → sulfenamide covalently binds H⁺/K⁺-ATPase → irreversible acid suppression",side:"Headache, ↓Mg²⁺ (long-term), ↓B12 (long-term), C. diff risk, ↑ fracture risk",indication:"GERD, PUD, H. pylori (triple therapy), ZE syndrome, NSAID-induced ulcer prevention",dose:"GERD: 20mg OD × 4–8wk; H. pylori: 20mg BID × 14d; Maintenance: 20mg OD",renal:"No dose adjustment",mnemonic:"OMEprazole = OME (Old Mother Engine) — IRREVERSIBLY breaks the acid pump"},
+  {brand:"Nexium",generic:"esomeprazole",class:"PPI",moa:"S-enantiomer (active form) of omeprazole → same irreversible H⁺/K⁺-ATPase inhibition but better bioavailability",side:"↓Mg²⁺, ↓B12, C. diff, ↑ hip fracture risk (long-term)",indication:"GERD (erosive), H. pylori, ZE syndrome, Prevention of NSAID ulcers",dose:"Erosive GERD: 40mg OD × 4–8wk; H. pylori: 40mg BID × 14d",renal:"No dose adjustment",mnemonic:"ESOMEprazole = ESsential/SAME as OME but purer (S-enantiomer only)"},
+  // ANTICOAGULANTS
+  {brand:"Coumadin",generic:"warfarin",class:"Anticoagulant",moa:"Inhibits VKOR → ↓ reduced vitamin K → ↓ factors II, VII, IX, X + protein C/S",side:"Bleeding, skin necrosis (protein C deficiency first 3–5d), teratogen (1st trimester), drug interactions",indication:"DVT/PE (treatment + prevention), A-fib (valvular), Mechanical heart valves",dose:"Individualized to INR 2–3 (most indications); 2.5–3.5 for mechanical valves",renal:"No dose adj; use with caution (↑ bleed risk)",mnemonic:"WARF = Watch And Reduce Factors — monitors INR; reversal with Vit K + FFP"},
+  {brand:"Xarelto",generic:"rivaroxaban",class:"Anticoagulant",moa:"Direct Factor Xa inhibitor; no antithrombin cofactor needed; predictable PK → no monitoring",side:"Bleeding (major bleed reversal with andexanet alfa), GI upset",indication:"DVT/PE, A-fib (non-valvular), ACS, VTE prophylaxis post-op",dose:"DVT/PE: 15mg BID × 21d → 20mg OD; A-fib: 20mg OD with evening meal",renal:"A-fib: avoid CrCl <15; DVT/PE: avoid CrCl <30",mnemonic:"RIVA-roxaban = RIVAL to warfarin — Xa blocker, no INR needed"},
+  {brand:"Eliquis",generic:"apixaban",class:"Anticoagulant",moa:"Selective direct Factor Xa inhibitor; dual renal/hepatic excretion → safer in renal impairment",side:"Bleeding; ↓ GI bleeding vs rivaroxaban; reversal: andexanet alfa",indication:"DVT/PE, A-fib (preferred DOAC in renal impairment), VTE prophylaxis",dose:"DVT/PE: 10mg BID × 7d → 5mg BID; A-fib: 5mg BID (2.5mg BID if ≥2 of: age≥80, weight≤60kg, Cr≥133)",renal:"Preferred DOAC if CrCl 15–50; avoid <15",mnemonic:"APIXaban = A PIX (pixel) of bleeding risk — lowest GI bleed of all DOACs"},
+  {brand:"Pradaxa",generic:"dabigatran",class:"Anticoagulant",moa:"Direct thrombin (IIa) inhibitor; blocks free + clot-bound thrombin; prodrug (dabigatran etexilate)",side:"GI bleeding/dyspepsia (take with food!), renal-dependent clearance — reversal: idarucizumab (Praxbind)",indication:"DVT/PE, A-fib (stroke prevention)",dose:"A-fib: 150mg BID (110mg BID if age≥80 or ↑ bleed risk); DVT: 150mg BID",renal:"Avoid CrCl <30 (80% renally cleared); CrCl 30–50: consider 110mg BID",mnemonic:"DABI = DABbles In thrombin — only DIRECT thrombin inhibitor DOAC; GI upset common"},
+  {brand:"Lovenox",generic:"enoxaparin",class:"Anticoagulant",moa:"LMWH; potentiates antithrombin III → selective Factor Xa inhibition (> IIa); predictable dosing",side:"Bleeding, HIT (less than UFH ~0.1%), injection site reactions, osteopenia (long-term)",indication:"DVT/PE (treatment + prophylaxis), ACS (NSTEMI/STEMI), Bridge therapy",dose:"Treatment: 1mg/kg SC BID or 1.5mg/kg OD; Prophylaxis: 40mg SC OD",renal:"CrCl <30: 1mg/kg OD (halved); monitor anti-Xa levels",mnemonic:"ENOX = ENOugh of the eXtra clotting — LMWH bridge: subcutaneous, predictable"},
+  // ANTIPLATELETS
+  {brand:"Plavix",generic:"clopidogrel",class:"Antiplatelet",moa:"Thienopyridine prodrug → CYP2C19 → active thiol; irreversibly blocks P2Y12 ADP receptor",side:"Bleeding, TTP (rare), GI upset; REDUCED EFFICACY in CYP2C19 poor metabolizers (PPI interaction?)",indication:"ACS, post-PCI (DAPT), Stroke/TIA, PAD",dose:"ACS: loading 300–600mg → 75mg OD maintenance; PAD: 75mg OD",renal:"No dose adjustment",mnemonic:"CLO = CLOsed platelet (permanently) — irreversible P2Y12 block; check CYP2C19"},
+  {brand:"Brilinta",generic:"ticagrelor",class:"Antiplatelet",moa:"Direct reversible P2Y12 antagonist; faster onset + more consistent than clopidogrel (no CYP activation needed)",side:"Dyspnea (adenosine-mediated — not bronchoconstriction), bleeding, bradycardia",indication:"ACS (preferred over clopidogrel), Post-MI prevention",dose:"Loading: 180mg → 90mg BID × 12mo → 60mg BID for extended prevention",renal:"No dose adjustment; use with caution in dialysis",mnemonic:"BRIL-inta = BRILliant — brighter P2Y12 block (reversible, no CYP needed, faster)"},
+  {brand:"Aspirin",generic:"acetylsalicylic acid",class:"Antiplatelet",moa:"Irreversibly acetylates COX-1 + COX-2 → ↓ TXA2 (platelet aggregation) at low dose; analgesic at higher dose",side:"GI ulcers/bleeding, Reye syndrome (children — NEVER use), bronchospasm in ASA-sensitive asthma",indication:"CV event prevention (secondary), ACS, Post-PCI (DAPT), Pain/fever/inflammation (higher doses)",dose:"Antiplatelet: 81mg OD; ACS: 162–325mg loading then 81mg OD; Analgesia: 325–650mg q4–6h",renal:"Avoid in severe renal impairment; ↑ uric acid at low doses",mnemonic:"ASA = Always Stops Aggregation — but also Always irritates Stomach"},
+  // DIURETICS
+  {brand:"Lasix",generic:"furosemide",class:"Diuretic",moa:"Loop diuretic; inhibits NKCC2 cotransporter in thick ascending limb → massive Na⁺/K⁺/Cl⁻ loss",side:"Hypokalemia, hyponatremia, ototoxicity (IV/rapid), hyperuricemia, dehydration",indication:"Edema (HF, cirrhosis, renal disease), Acute pulmonary edema, Hypercalcemia, HTN",dose:"Edema: 20–80mg OD/BID PO; Acute: 40–80mg IV; max 600mg/day",renal:"Higher doses needed in renal impairment (↓ tubular secretion); avoid if anuric",mnemonic:"FuroseMADE = MADE to lose fluid — LOOP of Henle LASSO pulling out Na+K+Cl"},
+  {brand:"HydroDIURIL",generic:"hydrochlorothiazide",class:"Diuretic",moa:"Inhibits NCC transporter in DCT → ↓ Na⁺/H₂O; ↑ distal Ca²⁺ reabsorption (unlike loops)",side:"Hypokalemia, hyperuricemia (gout flare), hyperglycemia, hyperlipidemia, hyponatremia",indication:"HTN (1st line, JNC), Edema, Calcium nephrolithiasis (prevents stones!)",dose:"HTN: 12.5–50mg OD; Edema: 25–100mg OD/BID",renal:"Ineffective CrCl <30 (don't use as diuretic); OK at low doses for HTN",mnemonic:"HCTZ = Helps Ca remain in Tube Zone (distal) — ↑ Ca reabsorption → prevents kidney stones"},
+  {brand:"Aldactone",generic:"spironolactone",class:"Diuretic",moa:"Competitive aldosterone antagonist at mineralocorticoid receptor → ↓ Na⁺ reabsorption + ↓ K⁺ secretion",side:"Hyperkalemia (DANGER with ACEi/ARB), gynecomastia (anti-androgen), menstrual irregularity",indication:"HFrEF (mortality ★ at 25mg), Hyperaldosteronism, Resistant HTN, Cirrhotic ascites, Hirsutism/PCOS",dose:"HF: 25mg OD; Hyperaldosteronism: 100–400mg OD",renal:"Avoid CrCl <30 (hyperkalemia risk); dose ↓ with CrCl 30–50",mnemonic:"SPIRO = SPares potassIum, Robs Omnipotent aldosterone — K+ SPARING, aldosterone BLOCKING"},
+  // CCBs
+  {brand:"Norvasc",generic:"amlodipine",class:"CCB",moa:"Dihydropyridine; blocks vascular L-type Ca²⁺ channels selectively → arterial vasodilation; long t½ ~40h",side:"Peripheral edema (dose-related, vasodilation of post-capillary venules), flushing, headache, reflex tachycardia",indication:"HTN (excellent + safe in CKD/DM), Stable & vasospastic angina (Prinzmetal)",dose:"HTN/Angina: 5–10mg OD",renal:"No dose adjustment needed",mnemonic:"AMLO = ALMOST no cardiac effect — purely VASCULar (DHP = vessels only)"},
+  {brand:"Cardizem",generic:"diltiazem",class:"CCB",moa:"Benzothiazepine; blocks cardiac AND vascular L-type Ca²⁺ → ↓ HR + ↓ SVR (mixed effect)",side:"Bradycardia, AV block, edema, constipation, flushing",indication:"HTN, Stable angina, A-fib rate control (IV), SVT (IV), Vasospastic angina",dose:"HTN: 120–480mg/day (CD/XR); IV rate control: 0.25mg/kg bolus → 5–15mg/hr infusion",renal:"No major dose adjustment",mnemonic:"DILTI = DILaTes + slows TIme (HR) — DOES BOTH cardiac + vascular (non-DHP)"},
+  {brand:"Calan",generic:"verapamil",class:"CCB",moa:"Phenylalkylamine; primarily blocks CARDIAC L-type Ca²⁺ → greatest ↓ HR + contractility of all CCBs",side:"Constipation (most common — via GI Ca²⁺ blockade), bradycardia, AV block, HF exacerbation",indication:"SVT (IV first-line), A-fib rate control, HTN, Angina, Cluster headache prophylaxis",dose:"HTN: 120–480mg/day divided; IV SVT: 5–10mg over 2 min",renal:"↓ dose in severe renal/hepatic impairment",mnemonic:"VERA = VERy Arrhythmia-focused — strongest cardiac effect (heart > vessels)"},
+  // CORTICOSTEROIDS
+  {brand:"Deltasone",generic:"prednisone",class:"Corticosteroid",moa:"Prodrug → prednisolone; binds GR → NF-κB suppression → ↓ cytokines, prostaglandins, COX",side:"Hyperglycemia, osteoporosis (↓ Ca²⁺ absorption), Cushing syndrome, adrenal suppression (>3wk)",indication:"Asthma exacerbations, Autoimmune disease, Organ transplant rejection, Inflammation",dose:"Asthma: 40–60mg OD × 5d; Anti-inflammatory: 0.5–1mg/kg/day; taper if >3 weeks",renal:"No dose adjustment",mnemonic:"PRED = Potent REDucer of inflammation — but PRED-ator of bones and glucose"},
+  {brand:"Decadron",generic:"dexamethasone",class:"Corticosteroid",moa:"Potent GR agonist (25× more than cortisol); minimal mineralocorticoid → less Na⁺/H₂O retention",side:"Hyperglycemia (severe), adrenal suppression, fluid retention, psychiatric effects (mania/psychosis)",indication:"Cerebral edema (first-line), Severe COVID-19 (O₂-dependent), Croup, Anti-emesis in chemo",dose:"Cerebral edema: 10mg IV → 4mg q6h; Croup: 0.6mg/kg IM/PO single dose; Chemo: 12–20mg IV",renal:"No dose adjustment",mnemonic:"DEX = DEXterously potent — MOST potent GCS; no salt retention (no mineral effect)"},
+  // ANTIDIABETICS
+  {brand:"Glucophage",generic:"metformin",class:"Antidiabetic",moa:"Activates AMPK → ↓ hepatic gluconeogenesis + ↑ insulin sensitivity; NO insulin secretion → NO hypoglycemia",side:"GI upset (nausea, diarrhea — start low, take with food), lactic acidosis (rare, in renal failure), ↓ B12",indication:"T2DM (first-line universally), PCOS, Pre-diabetes, Insulin sensitization",dose:"500mg BID with meals → 850mg BID → 1000mg BID; max 2550mg/day",renal:"STOP if CrCl <30 (lactic acidosis risk); caution CrCl 30–45; OK CrCl >45",mnemonic:"MET = METabolism optimizer — METabolism not insulin (no hypo risk)"},
+  {brand:"Ozempic",generic:"semaglutide",class:"Antidiabetic",moa:"GLP-1 receptor agonist → glucose-dependent ↑ insulin, ↓ glucagon, ↓ gastric emptying, ↓ appetite (hypothalamic)",side:"Nausea/vomiting (most common — improves with time), pancreatitis risk, thyroid C-cell tumors (rodents), gastroparesis",indication:"T2DM (CV benefit ★), Obesity as Wegovy (2.4mg/wk), CVD risk reduction",dose:"DM: 0.25mg/wk × 4wk → 0.5mg/wk → 1mg/wk → max 2mg/wk",renal:"No dose adjustment (not renally cleared)",mnemonic:"SEMA = SEMAphore to the GUT — signals fullness to GUT + BRAIN"},
+  {brand:"Jardiance",generic:"empagliflozin",class:"Antidiabetic",moa:"SGLT-2 inhibitor → blocks glucose reabsorption in proximal tubule → glucosuria + osmotic diuresis + natriuresis",side:"UTIs (glucose in urine), genital mycotic infections (yeast in glucose), DKA (euglycemic), volume depletion",indication:"T2DM (cardiorenal benefit ★★), HFrEF (mortality ★), CKD (slows progression)",dose:"10mg OD with or without food; can ↑ to 25mg for additional glycemic control",renal:"Stop if CrCl <30 (glycemic effect lost; can continue for HF/CKD benefit to eGFR 20)",mnemonic:"EMPA = EMPtying the sugar tank via kidneys — glucose EXIT strategy"},
+  {brand:"Januvia",generic:"sitagliptin",class:"Antidiabetic",moa:"DPP-4 inhibitor → ↓ degradation of endogenous GLP-1 + GIP → ↑ glucose-dependent insulin + ↓ glucagon",side:"Nasopharyngitis (most common), pancreatitis risk, joint pain (rare), HF hospitalization (saxagliptin concern)",indication:"T2DM (add-on to metformin; weight neutral, well tolerated in elderly)",dose:"100mg OD; 50mg OD if CrCl 30–50; 25mg OD if CrCl <30",renal:"DOSE REDUCE (renally cleared): see above",mnemonic:"SIT-agliptin = SITs and waits for GLP-1 — STOPS the enzyme that breaks GLP-1"},
+  {brand:"Lantus",generic:"insulin glargine",class:"Antidiabetic",moa:"Long-acting basal insulin analogue; pH-dependent microprecipitation at SQ site → peakless 24h absorption",side:"Hypoglycemia (less than NPH — peakless), weight gain, injection site lipodystrophy",indication:"T1DM, T2DM (basal insulin replacement, once-daily)",dose:"T1DM: 0.2–0.4 units/kg/day SQ OD; T2DM: 10 units OD at bedtime",renal:"↓ dose with CrCl decline (kidneys clear insulin → prolonged effect)",mnemonic:"GLARGINE = GLARingly flat — FLAT profile, no peak, given at same time DAILY"},
+  // ANTIPSYCHOTICS
+  {brand:"Risperdal",generic:"risperidone",class:"Antipsychotic",moa:"D2 + 5-HT2A antagonist (atypical); ↓ positive symptoms (D2) + ↓ negative symptoms (5-HT2A)",side:"EPS (highest among atypicals), hyperprolactinemia (highest — galactorrhea, amenorrhea), weight gain, QT",indication:"Schizophrenia, Bipolar mania, Irritability in autism (approved)",dose:"Schizophrenia: 2–8mg OD (start 1mg BID); max 16mg/day",renal:"Start 0.5mg BID; max 1.5mg BID if CrCl <30",mnemonic:"RISPE = RISks EPS the most — highest EPS risk atypical (most D2 blockade)"},
+  {brand:"Abilify",generic:"aripiprazole",class:"Antipsychotic",moa:"Partial D2/D3 AGONIST + 5-HT2A antagonist + 5-HT1A partial agonist → dopamine STABILIZER",side:"Akathisia (most common), insomnia, weight gain (less), NO hyperprolactinemia (partial agonist)",indication:"Schizophrenia, Bipolar disorder (mania + depression), MDD augmentation, Tourette",dose:"Schizophrenia: 10–30mg OD; MDD augmentation: 2–15mg OD",renal:"No dose adjustment",mnemonic:"ARI = ARIstocrat of antipsychotics — PARTIAL agonist (not full blocker); 'stabilizer'"},
+  {brand:"Seroquel",generic:"quetiapine",class:"Antipsychotic",moa:"D2/5-HT2A/H1/α1 antagonist; LOW D2 affinity → minimal EPS; H1 block → sedation",side:"Sedation (most common — used for insomnia), metabolic syndrome, QT prolongation, cataracts",indication:"Schizophrenia, Bipolar (mania + depression), MDD augmentation, Insomnia (off-label, controversial)",dose:"Schizophrenia: 300–800mg/day divided BID; Insomnia: 25–50mg OD",renal:"No dose adjustment",mnemonic:"QUETIAPINE = QUIET-iapine — most SEDATING (H1 block), QUIET EPS (low D2)"},
+  {brand:"Haldol",generic:"haloperidol",class:"Antipsychotic",moa:"Potent D2 antagonist (1st generation) — HIGH D2 affinity → high EPS, low sedation, low anticholinergic",side:"EPS (dystonia, akathisia, parkinsonism, TD — highest risk), NMS, hyperprolactinemia, QT",indication:"Schizophrenia, Acute agitation (IV/IM), Delirium (ICU — IV), Tourette syndrome",dose:"Agitation: 2–5mg IM/IV; Schizophrenia: 5–15mg/day PO",renal:"No dose adjustment",mnemonic:"HALDO = HIGH D2 blockade = HIGH EPS risk — '1st gen = 1st to cause EPS'"},
+  // BENZODIAZEPINES
+  {brand:"Valium",generic:"diazepam",class:"Benzodiazepine",moa:"Positive allosteric modulator at GABA-A → ↑ FREQUENCY of Cl⁻ channel opening → CNS depression",side:"Sedation, dependence (physical + psychological), respiratory depression, anterograde amnesia",indication:"Anxiety, Alcohol withdrawal (first-line), Status epilepticus (IV/rectal), Muscle spasm",dose:"Anxiety: 2–10mg BID–QID; Alcohol withdrawal: 10–20mg q1–4h PRN; SE: 5–10mg IV",renal:"No dose adjustment",mnemonic:"DIAZ = DIAZ-epam = DIAL up the GABA (frequency of Cl- opening)"},
+  {brand:"Ativan",generic:"lorazepam",class:"Benzodiazepine",moa:"High-affinity GABA-A modulator; NO active metabolites → safe in liver disease; direct conjugation",side:"Sedation, amnesia, respiratory depression; propylene glycol toxicity (high-dose IV)",indication:"Anxiety, Status epilepticus (first-line IV/IM), Pre-procedure sedation, Alcohol withdrawal",dose:"Anxiety: 0.5–2mg BID–TID; Status epilepticus: 4mg IV (2mg/min) → repeat once",renal:"No dose adjustment",mnemonic:"LORA = LOw Risk in hepaA — no hepatic metabolism (direct glucuronidation) — safest BZD in liver disease"},
+  // NSAIDs
+  {brand:"Advil",generic:"ibuprofen",class:"NSAID",moa:"Non-selective COX-1 + COX-2 inhibitor → ↓ prostaglandins → analgesia, antipyretic, anti-inflammatory; REVERSIBLE",side:"GI ulcers (COX-1 — ↓ mucosal protection), renal impairment (↓ PGE2), CV risk, ↑ bleeding time",indication:"Mild–moderate pain, Fever, Dysmenorrhea, Inflammatory conditions (arthritis)",dose:"Pain/fever: 400mg q4–6h; Arthritis: 400–800mg TID–QID; max 3200mg/day",renal:"Avoid CrCl <30 (acute kidney injury risk — ↓ afferent arteriole dilation)",mnemonic:"IBU = I Block Ubiquitous prostaglandins — both COX-1 (stomach) and COX-2 (pain)"},
+  {brand:"Celebrex",generic:"celecoxib",class:"NSAID",moa:"Selective COX-2 inhibitor → ↓ inflammatory prostaglandins; SPARES COX-1 → ↓ GI toxicity",side:"↑ CV risk (↑ TXA2:PGI2 ratio without COX-1 balance), edema, renal impairment",indication:"OA, RA, Acute pain, Familial adenomatous polyposis (FAP), Ankylosing spondylitis",dose:"OA: 200mg OD or 100mg BID; RA: 100–200mg BID; Acute pain: 400mg then 200mg",renal:"Avoid CrCl <30",mnemonic:"CELECOXIB = SELECtively COX-2 → CELECTS the inflammation, PROTECTS the stomach"},
+  // RESPIRATORY
+  {brand:"Ventolin",generic:"salbutamol / albuterol",class:"Bronchodilator (SABA)",moa:"Short-acting selective β2 agonist → ↓ Ca²⁺ in airway smooth muscle → bronchodilation; onset 5–15min",side:"Tachycardia, tremor, ↓K⁺ (high dose/nebulized), paradoxical bronchospasm (rare)",indication:"Asthma (rescue — first-line), COPD exacerbation rescue, Exercise-induced bronchospasm",dose:"MDI: 1–2 puffs (100mcg each) PRN q4–6h; max 8 puffs/day; Nebulized: 2.5–5mg q4–6h",renal:"No dose adjustment",mnemonic:"SALBU = SALvation BUtt — SAVES airways FAST; use LESS = better asthma control"},
+  {brand:"Spiriva",generic:"tiotropium",class:"Bronchodilator (LAMA)",moa:"Long-acting muscarinic antagonist (M3 blocking in bronchi); kinetically selective → 24h bronchodilation",side:"Dry mouth (most common), urinary retention (caution in BPH), constipation, blurred vision",indication:"COPD (maintenance — first-line preferred), Asthma (add-on in moderate–severe)",dose:"Handihaler: 18mcg OD; Respimat: 5mcg (2 puffs of 2.5mcg) OD",renal:"CrCl <50: use caution; CrCl <30: ↓ dose (accumulation)",mnemonic:"TIO = TIme Out for bronchospasm — LONG-acting, ANTICHOLINERGIC, 24h"},
+  {brand:"Singulair",generic:"montelukast",class:"Leukotriene Modifier",moa:"Selective CysLT1 receptor antagonist → blocks leukotriene D4 (LTD4) mediated bronchoconstriction + inflammation",side:"Neuropsychiatric effects (depression, suicidality, aggression — BLACK BOX warning), headache, GI",indication:"Asthma (prophylaxis, mild–moderate), Allergic rhinitis, Exercise-induced bronchospasm",dose:"Adults: 10mg OD at bedtime; 6–14yr: 5mg OD; 2–5yr: 4mg OD",renal:"No dose adjustment",mnemonic:"MONTE = MONsters TOE away (leukoTRIEne) — blocks LT pathways; watch for NEURO side effects"},
+  // NEURO/EPILEPSY
+  {brand:"Dilantin",generic:"phenytoin",class:"Antiepileptic",moa:"Blocks voltage-gated Na⁺ channels (use-dependent — fires fast → more blockade) → stabilizes neuronal membranes",side:"Gingival hyperplasia (gums), hirsutism, coarsening of features, ataxia/nystagmus (toxicity), zero-order kinetics (narrow TI), fetal hydantoin syndrome",indication:"Generalized tonic-clonic, Focal seizures, Status epilepticus (IV fosphenytoin)",dose:"Maintenance: 300–400mg/day (target level 10–20mcg/mL); LOAD: 15–20mg/kg IV (max 50mg/min)",renal:"No dose adj (hepatically metabolized); monitor free phenytoin in hypoalbuminemia",mnemonic:"PHENYTOIN = PHENominal Non-linear kinetics — zero-order at therapeutic levels (small dose → big level change)"},
+  {brand:"Depakote",generic:"valproic acid / valproate",class:"Antiepileptic",moa:"Multiple: inhibits GABA-T → ↑ GABA; blocks Na⁺ + Ca²⁺ channels; ↑ GABA synthesis",side:"Hepatotoxicity (fatal in children <2yr), TERATOGEN (neural tube defects — spina bifida), thrombocytopenia, weight gain, tremor, alopecia (bipolar-like curly hair regrowth)",indication:"Broad-spectrum epilepsy (absence, GTC, myoclonic), Bipolar disorder (mania + prophylaxis), Migraine prophylaxis",dose:"Epilepsy: 10–60mg/kg/day; Bipolar: 750–1500mg/day (target 50–125mcg/mL)",renal:"No major adj; reduce in hepatic impairment",mnemonic:"VALProate = VALuable but VuLnerable — broad spectrum, but TERATOGENIC and hepatotoxic"},
+  {brand:"Neurontin",generic:"gabapentin",class:"Antiepileptic",moa:"Binds α2δ subunit of voltage-gated Ca²⁺ channels → ↓ excitatory neurotransmitter release (glutamate, substance P)",side:"Sedation, dizziness, ataxia, peripheral edema, weight gain; ABUSE POTENTIAL (emerging concern)",indication:"Focal seizures (adjunct), Neuropathic pain (DPN, PHN — first-line), Fibromyalgia, Restless legs syndrome",dose:"Neuropathic pain: 300mg TID → 1800–3600mg/day in 3 divided doses",renal:"↓ dose based on CrCl; CrCl 30–60: 400–1400mg/day; CrCl <15: 100–300mg/day",mnemonic:"GABA-pentin = GABApentin PENTs in Ca²⁺ — not actually GABA but acts near Ca²⁺ channels"},
+  // ALZHEIMER'S
+  {brand:"Aricept",generic:"donepezil",class:"Cholinesterase Inhibitor",moa:"Reversible, centrally-acting AChE inhibitor → ↑ ACh at synapses in cortex + hippocampus",side:"GI upset (nausea, diarrhea), bradycardia (vagotonic), insomnia (vivid dreams), muscle cramps",indication:"Alzheimer's disease (all stages — only drug approved for severe), Dementia with Lewy bodies",dose:"Mild–mod: 5mg OD at bedtime × 4–6wk → 10mg OD; Severe: 10–23mg OD",renal:"No dose adjustment",mnemonic:"DONE-pezil = DONE with forgetting — keeps ACh around in the brain"},
+  // GOUT
+  {brand:"Zyloprim",generic:"allopurinol",class:"Gout Agent",moa:"Xanthine oxidase inhibitor → blocks conversion of hypoxanthine → xanthine → uric acid",side:"Rash (SJS/TEN — check HLA-B*5801 in Asian/African patients), GI upset, allopurinol hypersensitivity syndrome, acute gout flare initially (start with colchicine cover)",indication:"Chronic gout (urate-lowering therapy), Hyperuricemia, Tumor lysis syndrome prevention, Recurrent calcium oxalate stones",dose:"Start 100mg OD → ↑ by 100mg q2–4wk to target uric acid <360mcmol/L; usual 300mg OD",renal:"CrCl 10–50: 100–200mg OD; CrCl <10: 100mg OD/QOD",mnemonic:"ALLO = ALLows less uric acid OUT — blocks XO enzyme; remember HLA-B*5801 before starting"},
+  {brand:"Colcrys",generic:"colchicine",class:"Gout Agent",moa:"Binds β-tubulin → inhibits microtubule polymerization → ↓ neutrophil chemotaxis + phagocytosis at gouty joint",side:"GI toxicity (diarrhea/nausea — dose-limiting, almost universal), myopathy (prolonged), bone marrow suppression (rare)",indication:"Acute gout (within 36h of attack), Gout prophylaxis, Familial Mediterranean fever, Pericarditis",dose:"Acute: 1.2mg then 0.6mg 1h later; Prophylaxis: 0.6mg OD–BID",renal:"CrCl <30: avoid prolonged use; avoid in dialysis",mnemonic:"COL = COLs (caulks) the joint inflammation — STOPS neutrophils via TUBULIN CAULK"},
+  // OSTEOPOROSIS
+  {brand:"Fosamax",generic:"alendronate",class:"Bisphosphonate",moa:"Inhibits osteoclast farnesyl pyrophosphate synthase (mevalonate pathway) → ↓ osteoclast activity → ↓ bone resorption",side:"Esophageal erosion/ulceration (stay UPRIGHT 30–60min!), ONJ (osteonecrosis of jaw), atypical femur fractures (prolonged use), flu-like symptoms (IV)",indication:"Osteoporosis (treatment + prevention), Paget's disease, Glucocorticoid-induced osteoporosis",dose:"70mg once WEEKLY; 10mg OD; take with plain water, 30–60min before first food/med",renal:"Avoid CrCl <35 (accumulates in bone)",mnemonic:"ALEND = ALEND your bones support — must stay UPRIGHT (esophagus risk)"},
+  // ANALGESIC
+  {brand:"Tylenol",generic:"acetaminophen",class:"Analgesic/Antipyretic",moa:"Inhibits central COX-3 (prostaglandin synthesis) + activates descending serotonergic pathways → analgesia/antipyresis",side:"HEPATOTOXICITY (overdose — #1 cause of acute liver failure in Canada/USA), rash; NO GI toxicity, NO CV risk",indication:"Mild–moderate pain, Fever, Safe in pregnancy (all trimesters — preferred), Safe in renal disease",dose:"325–1000mg q4–6h; MAX 4g/day (3g if liver disease, elderly, EtOH use); NAC antidote",renal:"No dose adjustment (preferred analgesic in CKD)",mnemonic:"APAP = Always Preferred After Pregnancy — safest analgesic; overdose = liver failure"},
+  {brand:"Zofran",generic:"ondansetron",class:"Antiemetic",moa:"Selective 5-HT3 receptor antagonist in GI tract + CTZ (chemoreceptor trigger zone) → blocks vagal afferent nausea signals",side:"QT prolongation (dose-dependent — check ECG), headache, constipation, transient ↑LFTs",indication:"Chemotherapy-induced N&V (most effective), Post-op N&V, Hyperemesis gravidarum (cautious — some QT concern)",dose:"CINV: 8mg IV/PO 30min before chemo; Post-op: 4mg IV; max 16mg/day",renal:"No dose adjustment",mnemonic:"ONDAN = ON DEMAND nausea blocker — 5-HT3 bouncer at the vomiting trigger zone"},
+  {brand:"Tylenol #3",generic:"codeine/acetaminophen",class:"Opioid",moa:"Codeine → CYP2D6 → morphine (10%); μ-opioid agonist; PRODRUG entirely dependent on CYP2D6 activation",side:"Constipation, sedation, respiratory depression (ultra-rapid metabolizers risk!), codeine toxicity in CYP2D6 ultra-rapid metabolizers (AVOID in breastfeeding — neonatal death reported)",indication:"Mild–moderate pain (2nd line), Antitussive (cough suppression at low dose)",dose:"15–60mg (codeine) q4–6h; max 360mg codeine/day",renal:"CrCl <50: ↑ dosing interval; CrCl <10: avoid",mnemonic:"CODEINE = COuld DEnEtrate IN Extreme — depends on CYP2D6; 'ultra-rapid = ultra-dangerous'"},
+  // PDE5
+  {brand:"Cialis",generic:"tadalafil",class:"PDE5 Inhibitor",moa:"Inhibits PDE5 → ↑ cGMP → smooth muscle relaxation → ↑ penile/clitoral blood flow; also relaxes bladder neck/prostate",side:"Headache, flushing, back pain (unique to tadalafil — PDE11), hypotension with nitrates (ABSOLUTE CONTRAINDICATION)",indication:"Erectile dysfunction (ED), BPH (once-daily low dose), Pulmonary arterial hypertension",dose:"ED PRN: 10mg 30min before → adjust 5–20mg; ED daily: 2.5–5mg OD; BPH: 5mg OD",renal:"CrCl 31–50: max 10mg q48h; CrCl <30: max 5mg",mnemonic:"TADALA = TADALi (tadali) — the WEEKEND pill (36h duration); PDE5 + PDE11 = BACK pain"},
 ];
 
-function showTab(tab){
-  document.querySelectorAll('.container').forEach(e=>e.style.display='none');
-  document.getElementById(tab).style.display='block';
+// ══════════════════════════════════════════════════════════════
+// INTERACTION DATABASE
+// ══════════════════════════════════════════════════════════════
+const INTERACTIONS = [
+  {a:"warfarin",b:"aspirin",severity:"major",desc:"ASA inhibits platelet function AND competes for plasma protein binding → ↑ free warfarin → ↑ INR + ↑ bleeding risk. GI ulcers from ASA compound bleeding.",mgmt:"Avoid combination unless benefit clearly outweighs risk (e.g., mechanical valve); if necessary, add PPI and monitor INR closely."},
+  {a:"warfarin",b:"amoxicillin",severity:"moderate",desc:"Broad-spectrum antibiotics alter GI flora → ↓ Vitamin K-producing bacteria → ↑ INR. Effect variable.",mgmt:"Monitor INR 3–5 days after starting/stopping antibiotic; adjust warfarin dose accordingly."},
+  {a:"warfarin",b:"metronidazole",severity:"major",desc:"Metronidazole inhibits CYP2C9 (main warfarin metabolizer) → ↑ S-warfarin levels → ↑ INR significantly (up to 2×).",mgmt:"Reduce warfarin dose ~25–50% and check INR in 3–4 days when starting metronidazole."},
+  {a:"metformin",b:"contrast dye",severity:"major",desc:"IV iodinated contrast → transient renal impairment → metformin accumulation → lactic acidosis risk.",mgmt:"Hold metformin 48h before/after IV contrast if CrCl <60 or AKI risk; recheck renal function before restarting."},
+  {a:"ace inhibitor",b:"spironolactone",severity:"major",desc:"Both ↑K⁺: ACEi inhibits aldosterone → ↓ K⁺ secretion; spironolactone blocks aldosterone → ↓ K⁺ secretion. Additive → severe hyperkalemia risk.",mgmt:"Monitor K⁺ and creatinine closely; avoid in CrCl <30; target K⁺ <5.0 mmol/L; do not use if K⁺ >5.0 at baseline."},
+  {a:"ace inhibitor",b:"nsaid",severity:"major",desc:"NSAIDs inhibit PGE2 → afferent arteriolar constriction → ↓ GFR; ACEi already ↓ angiotensin II (efferent dilation) → combination causes AKI ('triple whammy' with diuretic).",mgmt:"Avoid NSAID with ACEi + diuretic ('triple whammy'); use acetaminophen for pain instead; monitor creatinine."},
+  {a:"ssri",b:"triptan",severity:"moderate",desc:"Additive serotonergic effect → risk of serotonin syndrome (agitation, hyperthermia, myoclonus, hyperreflexia).",mgmt:"Combination used clinically (benefit generally outweighs risk); educate patient on serotonin syndrome signs; avoid high-dose combinations."},
+  {a:"ssri",b:"nsaid",severity:"moderate",desc:"SSRIs deplete platelet serotonin (needed for aggregation) + NSAIDs inhibit COX-1 → additive ↑ bleeding risk, especially GI bleeding.",mgmt:"Add PPI if combination needed (especially in patients >60y or with GI history)."},
+  {a:"pde5 inhibitor",b:"nitrate",severity:"major",desc:"Both ↑ cGMP → additive smooth muscle relaxation → SEVERE hypotension, possibly fatal. Absolute contraindication.",mgmt:"ABSOLUTE CONTRAINDICATION. Do not combine under any circumstance. Nitrate effect can persist 24–48h; wait 24h after sildenafil, 48h after tadalafil before nitrate."},
+  {a:"statin",b:"gemfibrozil",severity:"major",desc:"Gemfibrozil inhibits OATP1B1 + glucuronidation of statin → ↑ statin plasma levels → ↑ myopathy/rhabdomyolysis risk (10× increase).",mgmt:"Avoid combination; use fenofibrate instead (much lower interaction risk with statins)."},
+  {a:"statin",b:"clarithromycin",severity:"moderate",desc:"Clarithromycin potently inhibits CYP3A4 → ↑ simvastatin/atorvastatin levels → ↑ myopathy risk.",mgmt:"Hold simvastatin/lovastatin/atorvastatin during short clarithromycin course; or use pravastatin/rosuvastatin (not CYP3A4-dependent)."},
+  {a:"clopidogrel",b:"omeprazole",severity:"moderate",desc:"Omeprazole inhibits CYP2C19 → ↓ activation of clopidogrel prodrug → ↓ antiplatelet effect by ~25–45%.",mgmt:"Use pantoprazole (least CYP2C19 inhibition) if PPI needed with clopidogrel; or switch to ticagrelor (no CYP2C19 dependence)."},
+  {a:"fluoroquinolone",b:"antacid",severity:"moderate",desc:"Antacids (Mg²⁺, Al³⁺, Ca²⁺) chelate fluoroquinolones → form insoluble complexes → ↓ oral bioavailability by 30–90%.",mgmt:"Separate administration by at least 2 hours; take fluoroquinolone BEFORE antacid."},
+  {a:"ace inhibitor",b:"arb",severity:"major",desc:"Dual RAAS blockade → additive hyperkalemia + AKI + hypotension risk with no additional CV benefit (ONTARGET trial).",mgmt:"Avoid routine combination; only consider in specialist settings (e.g., proteinuria in CKD) with close monitoring."},
+  {a:"lithium",b:"nsaid",severity:"major",desc:"NSAIDs inhibit PGE2 → ↓ renal lithium excretion → ↑ lithium levels → toxicity (tremor, confusion, arrhythmia).",mgmt:"Avoid NSAIDs in patients on lithium; use acetaminophen; if NSAID necessary, check lithium level and reduce dose."},
+  {a:"metronidazole",b:"alcohol",severity:"major",desc:"Metronidazole inhibits acetaldehyde dehydrogenase → acetaldehyde accumulates → disulfiram-like reaction: flushing, nausea, vomiting, tachycardia.",mgmt:"Avoid alcohol during metronidazole therapy and for 48h after completion."},
+  {a:"benzodiazepine",b:"opioid",severity:"major",desc:"Additive CNS + respiratory depression → synergistic risk of fatal respiratory arrest. Combined prescribing carries a major safety warning across all major pharmacopoeias.",mgmt:"Avoid combination if possible; if needed, use lowest doses for shortest duration; ensure naloxone is accessible; counsel on risks."},
+  {a:"ssri",b:"maoi",severity:"major",desc:"Serotonin syndrome risk: excessive 5-HT → agitation, hyperthermia, myoclonus, autonomic instability; can be fatal.",mgmt:"ABSOLUTE CONTRAINDICATION. Washout 14 days between MAOI and SSRI; 5 weeks washout after fluoxetine (long t½)."},
+  {a:"digoxin",b:"amiodarone",severity:"major",desc:"Amiodarone inhibits P-gp + CYP3A4 → ↑ digoxin levels by 50–100%; digitalis toxicity (bradycardia, nausea, visual disturbances).",mgmt:"Reduce digoxin dose by 30–50% when starting amiodarone; monitor digoxin levels and ECG closely."},
+  {a:"warfarin",b:"fluconazole",severity:"major",desc:"Fluconazole potently inhibits CYP2C9 (main warfarin metabolizer) → ↑ S-warfarin → ↑ INR and bleeding risk.",mgmt:"Reduce warfarin dose ~30–50%; check INR within 3–5 days of starting fluconazole; consider azithromycin for antifungal alternative."},
+];
+
+// ══════════════════════════════════════════════════════════════
+// QUIZ BANK
+// ══════════════════════════════════════════════════════════════
+const QUIZ = [
+  {q:"The 'dry cough' side effect of ACE inhibitors is caused by accumulation of:",opts:["Angiotensin II","Bradykinin","Aldosterone","Renin"],c:1,exp:"ACE degrades bradykinin. ACE inhibition → bradykinin accumulates → irritates airway → dry cough. ARBs block the receptor, not ACE — no cough."},
+  {q:"Which anticoagulant requires routine INR monitoring?",opts:["Apixaban (Eliquis)","Dabigatran (Pradaxa)","Warfarin (Coumadin)","Rivaroxaban (Xarelto)"],c:2,exp:"Warfarin has unpredictable pharmacokinetics (diet, genetics, drug interactions) requiring INR target 2–3. DOACs have predictable PK requiring NO routine monitoring."},
+  {q:"Benzodiazepines potentiate GABA-A by increasing:",opts:["Duration of Cl⁻ channel opening (barbiturates do this)","Frequency of Cl⁻ channel opening","Cl⁻ channel conductance","Number of GABA-A receptors"],c:1,exp:"BZDs = FREQUENCY. Barbiturates = DURATION. Classic exam distinction. Both ↑ chloride influx → hyperpolarization → CNS depression."},
+  {q:"Clopidogrel (Plavix) requires CYP2C19 for activation. Which PPI has the LEAST interaction?",opts:["Omeprazole","Esomeprazole","Lansoprazole","Pantoprazole"],c:3,exp:"Pantoprazole has the least CYP2C19 inhibition → least reduction in clopidogrel activation. Omeprazole and esomeprazole are the worst offenders."},
+  {q:"Furosemide acts primarily at which nephron segment?",opts:["Proximal convoluted tubule","Thick ascending limb of Loop of Henle (NKCC2)","Distal convoluted tubule (NCC)","Collecting duct (mineralocorticoid receptor)"],c:1,exp:"Furosemide inhibits NKCC2 in the thick ascending limb. HCTZ targets NCC (DCT). Spironolactone targets collecting duct aldosterone receptors."},
+  {q:"Which statin has the MOST drug interactions due to minimal CYP metabolism?",opts:["Simvastatin (most CYP3A4)","Atorvastatin","Pravastatin (safest — no CYP)","Rosuvastatin"],c:2,exp:"TRICK question — Pravastatin has FEWEST interactions (no CYP metabolism — direct glucuronidation). Simvastatin/lovastatin have most (high CYP3A4 dependence). Safest in transplant patients on cyclosporine."},
+  {q:"A 55-year-old man on PDE5 inhibitor presents with chest pain. Nitroglycerin is:",opts:["Safe — give 0.4mg SL immediately","Safe if >6h since sildenafil","Absolutely CONTRAINDICATED","Safe only if BP is >100mmHg"],c:2,exp:"PDE5 inhibitors + nitrates = additive cGMP accumulation → SEVERE hypotension → potentially fatal. ABSOLUTE CONTRAINDICATION regardless of timing with sildenafil (<24h) or tadalafil (<48h)."},
+  {q:"Metformin is CONTRAINDICATED when CrCl is:",opts:["<60 mL/min","<45 mL/min (caution zone)","<30 mL/min","<15 mL/min"],c:2,exp:"Metformin should be STOPPED when CrCl <30 (risk of lactic acidosis from drug accumulation). CrCl 30–45 = use with caution + ↓ dose. CrCl 45–60 = continue but monitor."},
+  {q:"Which ARB has a URICOSURIC effect (lowers uric acid) — useful in gout + HTN?",opts:["Valsartan","Candesartan","Losartan","Olmesartan"],c:2,exp:"Losartan is UNIQUE among ARBs — inhibits URAT1 uric acid transporter → ↑ uric acid excretion → ↓ serum urate. Clinically useful in patients with HTN + gout."},
+  {q:"Valproate (Depakote) is CONTRAINDICATED in women of childbearing potential primarily because:",opts:["It causes hirsutism and acne","It causes neural tube defects (spina bifida)","It inhibits CYP enzymes","It causes severe hepatotoxicity only in women"],c:1,exp:"Valproate is highly teratogenic — neural tube defects (spina bifida) occur in ~5% of exposed pregnancies. It should be avoided in all women who could become pregnant (requires double contraception if used)."},
+  {q:"'Red Man Syndrome' during vancomycin infusion is best managed by:",opts:["Stopping vancomycin permanently (allergy)","Slowing the infusion rate + antihistamine pretreatment","Switching to an alternative antibiotic","Giving epinephrine immediately"],c:1,exp:"Red Man Syndrome is an infusion RATE-related reaction (NOT a true IgE allergy). Slow the infusion rate (infuse over ≥60 min) and pretreat with diphenhydramine. Vancomycin can be continued."},
+  {q:"Which antidiabetic drug class has proven mortality benefit in BOTH HFrEF and CKD?",opts:["GLP-1 agonists (semaglutide)","DPP-4 inhibitors (sitagliptin)","SGLT-2 inhibitors (empagliflozin)","Sulfonylureas (glimepiride)"],c:2,exp:"SGLT-2 inhibitors (empagliflozin, dapagliflozin) have landmark trials (EMPA-REG, DAPA-HF, CREDENCE) showing mortality and hospitalization reduction in both HFrEF and CKD independent of glucose lowering."},
+  {q:"Aripiprazole (Abilify) is unique among antipsychotics because it is a:",opts:["Full D2 antagonist with high EPS risk","Partial D2/D3 AGONIST — dopamine stabilizer","Selective 5-HT2A antagonist only","GABA-A potentiator"],c:1,exp:"Aripiprazole acts as a partial D2/D3 agonist (not full blocker). In dopamine excess (psychosis) → blocks; in dopamine deficit (cognition) → activates. This 'stabilizes' dopamine tone and reduces EPS + prolactin elevation."},
+  {q:"A patient develops severe diarrhea during metronidazole therapy and has just consumed wine. This is:",opts:["Serotonin syndrome","C. difficile colitis from metronidazole","Disulfiram-like reaction from alcohol","Clostridium perfringens food poisoning"],c:2,exp:"Metronidazole inhibits acetaldehyde dehydrogenase → alcohol → acetaldehyde accumulates → flushing, nausea, vomiting, tachycardia (disulfiram-like). Instruct patients to avoid ALL alcohol during treatment and 48h after."},
+  {q:"The TRIPLE WHAMMY combination causing AKI is:",opts:["ACEi + ARB + spironolactone","ACEi + diuretic + NSAID","NSAID + aminoglycoside + contrast dye","Beta-blocker + CCB + digoxin"],c:1,exp:"ACEi (↓ efferent resistance) + Diuretic (↓ volume) + NSAID (↓ afferent dilation via PGE2) → dramatic ↓ GFR → AKI. Avoid NSAIDs in patients on this combination."},
+  {q:"GLP-1 receptor agonists like semaglutide (Ozempic) cause weight loss primarily via:",opts:["Stimulating insulin secretion at any glucose level","Slowing gastric emptying + suppressing appetite via hypothalamic receptors","Blocking fat absorption in intestine","Increasing urinary glucose excretion"],c:1,exp:"GLP-1 agonists slow gastric emptying (earlier satiety) AND act on hypothalamic GLP-1 receptors → ↓ appetite. Insulin secretion is GLUCOSE-DEPENDENT (safer — no hypoglycemia at low glucose)."},
+  {q:"Which antiepileptic follows ZERO-ORDER kinetics at therapeutic levels (small dose change = large level change)?",opts:["Valproate","Carbamazepine","Phenytoin","Levetiracetam"],c:2,exp:"Phenytoin saturates its metabolic enzymes at therapeutic concentrations → zero-order kinetics (fixed amount metabolized per time regardless of concentration). Small dose ↑ → disproportionate ↑ in levels → toxicity. TDM essential."},
+  {q:"Spironolactone's most dangerous interaction is with:",opts:["Metformin","ACE inhibitors or ARBs (hyperkalemia)","Warfarin","Digoxin"],c:1,exp:"Spironolactone (aldosterone antagonist) + ACEi/ARB (both ↓ aldosterone effect) → additive ↑K⁺ → life-threatening hyperkalemia. Check K⁺ within 1 week of combining, then regularly."},
+  {q:"The 'back pain' unique side effect of tadalafil (Cialis) is due to inhibition of:",opts:["PDE5 in smooth muscle","PDE11 in skeletal muscle","COX-2 in lumbar vertebrae","Dopamine receptors in spinal cord"],c:1,exp:"Tadalafil inhibits PDE11 (found in skeletal muscle/testes) in addition to PDE5 → muscle aches particularly in lower back. Sildenafil has less PDE11 activity."},
+  {q:"WHICH is the only SSRI that can be used in children and adolescents for BOTH depression AND OCD?",opts:["Paroxetine","Sertraline","Fluoxetine","Citalopram"],c:2,exp:"Fluoxetine is the most studied SSRI in pediatric populations and has the broadest approval for depression in children ≥8 years and OCD in children ≥7 years. It has the most pediatric safety data of any SSRI."},
+  {q:"Allopurinol is started during a gout attack. What prophylactic medication should be co-prescribed?",opts:["Prednisone 40mg OD","Colchicine 0.6mg OD or BID","Indomethacin (NSAID)","Nothing — allopurinol is enough"],c:1,exp:"Starting allopurinol mobilizes urate deposits → can precipitate acute gout flares. Prophylactic colchicine (0.6mg OD–BID) should be given for the first 3–6 months of urate-lowering therapy."},
+  {q:"A patient taking metformin is scheduled for CT with IV contrast. The correct management is:",opts:["Continue metformin — no interaction","Stop metformin 48h before + restart after confirming normal renal function","Stop metformin permanently","Switch to insulin for the procedure only"],c:1,exp:"IV contrast can cause transient AKI → metformin accumulates → lactic acidosis. Hold metformin 48h before contrast if CrCl <60 (or day of procedure + 48h after for low-risk patients); recheck Cr before restarting."},
+  {q:"HLA-B*5801 genetic testing is recommended before starting which drug?",opts:["Warfarin (before dosing)","Allopurinol (risk of SJS/TEN in Asians)","Clopidogrel (CYP2C19 metabolizer)","Abacavir (HIV — HLA-B*5701)"],c:1,exp:"HLA-B*5801 is strongly associated with allopurinol-induced Stevens-Johnson syndrome/TEN — particularly in Han Chinese, Thai, and Korean patients. Screening is recommended before starting allopurinol in these populations."},
+  {q:"Amlodipine (Norvasc) can cause edema because:",opts:["It causes renal sodium retention","It selectively dilates arterioles → ↑ capillary hydrostatic pressure → fluid filtration into tissues","It inhibits lymphatic drainage","It activates the RAAS"],c:1,exp:"Dihydropyridine CCBs dilate afferent arterioles (pre-capillary) more than venules → ↑ capillary pressure → dependent pitting edema. Adding ACEi/ARB dilates the venous side → reduces CCB-induced edema."},
+  {q:"The classic mnemonic for warfarin reversal options in order of urgency is:",opts:["FFP → Vit K → PCC → rFVIIa","Vit K → FFP → PCC","PCC → FFP → Vit K → rFVIIa (fastest to slowest effect)","Protamine → Vit K → FFP"],c:2,exp:"PCC (prothrombin complex concentrate) = fastest (minutes); FFP = moderately fast (1–2h); Vit K IV = hours; Vit K PO = 24h. For life-threatening bleeding: PCC + Vit K IV. Protamine reverses heparin/LMWH, not warfarin."},
+];
+
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+let customDrugs  = JSON.parse(localStorage.getItem('rx_custom')    || '[]');
+let bookmarks    = JSON.parse(localStorage.getItem('rx_bm')        || '[]');
+let notes        = JSON.parse(localStorage.getItem('rx_notes')     || '{}');
+let studyData    = JSON.parse(localStorage.getItem('rx_study')     || '{"streak":0,"lastDate":"","totalQ":0,"totalCorrect":0,"sessions":0,"viewed":[]}');
+let currentTab   = 'home';
+let searchQ      = '';
+let activeClass  = null;
+let expandedSet  = new Set();
+let editingIdx   = null;
+let pendingDel   = null;
+let showSearch   = false;
+
+function getAllDrugs() { return [...DRUGS, ...customDrugs]; }
+function persist() {
+  localStorage.setItem('rx_custom', JSON.stringify(customDrugs));
+  localStorage.setItem('rx_bm',     JSON.stringify(bookmarks));
+  localStorage.setItem('rx_notes',  JSON.stringify(notes));
+  localStorage.setItem('rx_study',  JSON.stringify(studyData));
 }
 
-function loadDrugs(list){
-  let html="";
-  list.forEach(d=>{
-    html += `<div class="card">
-      <b>${d.name}</b><br>
-      Class: ${d.class}<br>
-      Use: ${d.use}
-    </div>`;
+// ── Streak tracking ───────────────────────────────────────────
+function checkStreak() {
+  const today = new Date().toDateString();
+  if (studyData.lastDate === today) return;
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (studyData.lastDate === yesterday) {
+    studyData.streak++;
+  } else if (studyData.lastDate !== today) {
+    studyData.streak = studyData.lastDate ? (studyData.streak > 0 ? 1 : 1) : 1;
+  }
+  studyData.lastDate = today;
+  studyData.sessions++;
+  persist();
+}
+checkStreak();
+function updateStreakUI() {
+  document.getElementById('streakCount').textContent = studyData.streak + 'd';
+}
+updateStreakUI();
+
+// ── Tabs ─────────────────────────────────────────────────────
+function showTab(tab) {
+  // Lock admin when navigating away
+  if (currentTab === 'admin' && tab !== 'admin') adminUnlocked = false;
+  currentTab = tab;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  const sh = document.getElementById('subheader');
+  sh.classList.toggle('visible', tab === 'drugs' && showSearch);
+  document.getElementById('scrollArea').scrollTop = 0;
+  const fns = {home: renderHome, drugs: renderDrugs, flash: renderFlash, quiz: renderQuizMenu, ix: renderIx, saved: renderSaved, admin: renderAdmin};
+  (fns[tab] || renderHome)();
+}
+
+function toggleGlobalSearch() {
+  showSearch = !showSearch;
+  const sh = document.getElementById('subheader');
+  sh.classList.toggle('visible', showSearch && currentTab === 'drugs');
+  if (showSearch && currentTab !== 'drugs') showTab('drugs');
+  if (showSearch) setTimeout(() => document.getElementById('searchInput').focus(), 100);
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQ = e.target.value.toLowerCase(); renderDrugs();
+});
+
+// ── Chips ────────────────────────────────────────────────────
+function buildChips() {
+  const cr = document.getElementById('chipsRow');
+  cr.innerHTML = '';
+  const classes = ['All', ...new Set(getAllDrugs().map(d => d.class))].sort((a,b) => a==='All'?-1:a.localeCompare(b));
+  classes.forEach(cls => {
+    const c = document.createElement('button');
+    c.className = 'chip' + (cls === 'All' ? ' active' : '');
+    c.textContent = cls;
+    c.onclick = () => {
+      activeClass = cls === 'All' ? null : cls;
+      document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      renderDrugs();
+    };
+    cr.appendChild(c);
   });
-  document.getElementById("drugList").innerHTML = html;
 }
 
-function searchDrug(val){
-  let filtered = drugs.filter(d=>d.name.toLowerCase().includes(val.toLowerCase()));
-  loadDrugs(filtered);
+// ══════════════════════════════════════════════════════════════
+// HOME / DASHBOARD
+// ══════════════════════════════════════════════════════════════
+function renderHome() {
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const acc = studyData.totalQ > 0 ? Math.round(studyData.totalCorrect / studyData.totalQ * 100) : 0;
+  const days = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const today = new Date().getDay();
+  const dayBars = days.map((d, i) => {
+    const done = i === today ? false : i < today && studyData.streak >= (today - i);
+    const isToday = i === today;
+    return `<div class="streak-day${done?' done':''}${isToday?' today':''}">${d}</div>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="dash-greeting">${greet} 👋</div>
+    <p class="dash-sub">Your pharmacy study companion — NAPLEX · PEBC · KAPS · FPGEE and more.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card accent">
+        <div class="s-val">${getAllDrugs().length}</div>
+        <div class="s-lbl">Total Drugs</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-val">${studyData.streak}🔥</div>
+        <div class="s-lbl">Day Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-val">${acc}%</div>
+        <div class="s-lbl">Quiz Accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-val">${bookmarks.length}</div>
+        <div class="s-lbl">Bookmarked</div>
+      </div>
+    </div>
+
+    <div class="section-title">Weekly Streak</div>
+    <div class="streak-bar">
+      <div class="streak-days">${dayBars}</div>
+      <div style="font-size:.65rem;color:var(--muted);flex-shrink:0;">${studyData.streak}d 🔥</div>
+    </div>
+
+    <div class="section-title">Quick Start</div>
+    <div class="quick-actions">
+      <button class="qa-btn" onclick="showTab('flash')">
+        <div class="qa-icon">🃏</div>
+        <div class="qa-label">Flashcards</div>
+        <div class="qa-sub">${getAllDrugs().length} cards ready</div>
+      </button>
+      <button class="qa-btn" onclick="showTab('quiz')">
+        <div class="qa-icon">🧠</div>
+        <div class="qa-label">Exam Quiz</div>
+        <div class="qa-sub">${QUIZ.length} exam-style questions</div>
+      </button>
+      <button class="qa-btn" onclick="showTab('ix')">
+        <div class="qa-icon">⚡</div>
+        <div class="qa-label">Interactions</div>
+        <div class="qa-sub">Check drug pairs</div>
+      </button>
+      <button class="qa-btn" onclick="showTab('drugs')">
+        <div class="qa-icon">💊</div>
+        <div class="qa-label">Drug Library</div>
+        <div class="qa-sub">Full reference</div>
+      </button>
+    </div>
+
+    ${bookmarks.length ? `
+    <div class="section-title">Bookmarked Drugs</div>
+    <div class="recent-list">
+      ${bookmarks.slice(0,4).map(idx => {
+        const d = getAllDrugs()[idx]; if (!d) return '';
+        return `<div class="recent-item" onclick="goToDrug(${idx})">
+          <div>
+            <div class="ri-brand">${d.brand}</div>
+            <div class="ri-generic">${d.generic}</div>
+            <div class="ri-class">${d.class}</div>
+          </div>
+          <div class="ri-arrow">›</div>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+  `;
 }
 
-loadDrugs(drugs);
+function goToDrug(idx) {
+  showSearch = true;
+  showTab('drugs');
+  setTimeout(() => {
+    expandedSet.add(idx);
+    renderDrugs();
+    setTimeout(() => {
+      const el = document.getElementById('dc-' + idx);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }, 50);
+}
 
-// Quiz
-let q = {
-  question:"Metformin MOA?",
-  correct:"a"
-};
+// ══════════════════════════════════════════════════════════════
+// DRUG CARDS
+// ══════════════════════════════════════════════════════════════
+function renderDrugs() {
+  const all = getAllDrugs();
+  const q = searchQ.trim();
+  const filtered = all.filter(d => {
+    const mc = !activeClass || d.class === activeClass;
+    const ms = !q || [d.brand, d.generic, d.class, d.moa, d.indication||'', d.side||'', d.mnemonic||''].some(f => f.toLowerCase().includes(q));
+    return mc && ms;
+  });
 
-document.getElementById("question").innerText = q.question;
+  if (!filtered.length) {
+    document.getElementById('content').innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><p>No matches found.<br><span style="font-size:.7rem">Try brand name, generic, class, or MOA keyword</span></p></div>`;
+    return;
+  }
 
-function answer(ans){
-  if(ans === q.correct){
-    alert("Correct ✅");
+  document.getElementById('content').innerHTML = filtered.map((d, i) => {
+    const idx = all.indexOf(d);
+    const isCustom = idx >= DRUGS.length;
+    const bm = bookmarks.includes(idx);
+    const open = expandedSet.has(idx);
+    const note = notes[idx] || '';
+    return `
+    <div class="drug-card${bm?' bookmarked':''}${isCustom?' custom':''}" id="dc-${idx}" style="animation-delay:${Math.min(i,16)*16}ms">
+      <div class="dc-header" onclick="toggleCard(${idx})">
+        <div class="dc-row1">
+          <div class="dc-brand">${hl(d.brand,q)}</div>
+          <div class="dc-actions">
+            ${isCustom?`<button class="icon-btn" onclick="event.stopPropagation();editDrug(${idx-DRUGS.length})" title="Edit">✏️</button>`:''}
+            <button class="icon-btn${bm?' active':''}" onclick="event.stopPropagation();toggleBm(${idx})" title="Bookmark">⭐</button>
+          </div>
+        </div>
+        <div class="dc-generic">${hl(d.generic,q)}</div>
+        <div class="dc-tags">
+          <span class="tag tag-class">${hl(d.class,q)}</span>
+          ${isCustom?`<span class="tag tag-custom">custom</span>`:''}
+        </div>
+        <div class="dc-chevron">${open?'▲':'▼'}</div>
+      </div>
+      <div class="dc-body${open?' open':''}" id="body-${idx}">
+        <div class="dc-section"><span class="dc-lbl">MOA</span><span class="dc-val moa">${hl(d.moa,q)}</span></div>
+        <div class="dc-section"><span class="dc-lbl">Use</span><span class="dc-val ind">${hl(d.indication||'—',q)}</span></div>
+        <div class="dc-section"><span class="dc-lbl">ADRs</span><span class="dc-val adr">${hl(d.side||'—',q)}</span></div>
+        ${d.dose?`<div class="dc-section"><span class="dc-lbl">Dose</span><span class="dc-val dose">${hl(d.dose,q)}</span></div>`:''}
+        ${d.renal?`<div class="dc-section"><span class="dc-lbl">Renal</span><span class="dc-val dose" style="color:var(--orange)">${hl(d.renal,q)}</span></div>`:''}
+        ${d.mnemonic?`<div class="dc-section"><span class="dc-lbl">💡 Tip</span><span class="dc-val mem">${hl(d.mnemonic,q)}</span></div>`:''}
+        <div class="dc-footer">
+          <textarea class="dc-note" placeholder="📝 Add personal study note…" onchange="saveNote(${idx},this.value)">${note}</textarea>
+          <div class="note-status" id="ns-${idx}"></div>
+          <div class="dc-btns">
+            <button class="dc-btn" onclick="copyDrug(${idx},this)">⎘ Copy</button>
+            <button class="dc-btn" onclick="copyField('${(d.moa||'').replace(/'/g,"\\'")}',this)">⎘ MOA</button>
+            <button class="dc-btn" onclick="copyField('${(d.mnemonic||d.side||'').replace(/'/g,"\\'")}',this)">⎘ Tip</button>
+            ${isCustom?`<button class="dc-btn danger" onclick="promptDel(${idx-DRUGS.length})">🗑</button>`:''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleCard(idx) {
+  expandedSet.has(idx) ? expandedSet.delete(idx) : expandedSet.add(idx);
+  if (!document.getElementById('dc-'+idx)) { renderDrugs(); return; }
+  document.getElementById('body-'+idx).classList.toggle('open', expandedSet.has(idx));
+  document.querySelector(`#dc-${idx} .dc-chevron`).textContent = expandedSet.has(idx)?'▲':'▼';
+  if (!studyData.viewed.includes(idx)) { studyData.viewed.push(idx); persist(); }
+}
+
+function hl(text, q) {
+  if (!q || !text) return text||'';
+  return text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+}
+
+// ── Bookmarks ─────────────────────────────────────────────────
+function toggleBm(idx) {
+  bookmarks.includes(idx) ? (bookmarks = bookmarks.filter(i=>i!==idx)) : bookmarks.push(idx);
+  persist(); updateBmBadge();
+  const card = document.getElementById('dc-'+idx);
+  if (card) {
+    card.classList.toggle('bookmarked', bookmarks.includes(idx));
+    const btn = card.querySelector('.icon-btn:last-child');
+    if (btn) btn.classList.toggle('active', bookmarks.includes(idx));
+  }
+  if (currentTab === 'saved') renderSaved();
+}
+function updateBmBadge() {
+  const b = document.getElementById('bmBadge');
+  b.textContent = bookmarks.length;
+  b.classList.toggle('show', bookmarks.length > 0);
+}
+function renderSaved() {
+  const all = getAllDrugs();
+  if (!bookmarks.length) { document.getElementById('content').innerHTML = `<div class="empty-state"><div class="es-icon">⭐</div><p>No bookmarks yet.<br>Tap ⭐ on any drug card.</p></div>`; return; }
+  document.getElementById('content').innerHTML = bookmarks.map(idx => {
+    const d = all[idx]; if (!d) return '';
+    return `<div class="bm-card" onclick="goToDrug(${idx})">
+      <div>
+        <div class="bm-brand">${d.brand}</div>
+        <div class="bm-generic">${d.generic}</div>
+        <div class="bm-class">${d.class}</div>
+      </div>
+      <button class="bm-remove" onclick="event.stopPropagation();toggleBm(${idx})">✕ Remove</button>
+    </div>`;
+  }).join('');
+}
+
+// ── Notes ─────────────────────────────────────────────────────
+function saveNote(idx, val) {
+  notes[idx] = val.trim(); persist();
+  const m = document.getElementById('ns-'+idx);
+  if (m) { m.textContent = '✓ Saved'; setTimeout(() => m.textContent='', 2000); }
+}
+
+// ── Copy ──────────────────────────────────────────────────────
+function copyDrug(idx, btn) {
+  const d = getAllDrugs()[idx];
+  const t = `${d.brand} (${d.generic})\nClass: ${d.class}\nMOA: ${d.moa}\nIndication: ${d.indication||''}\nADRs: ${d.side||''}\nDose: ${d.dose||''}\nRenal: ${d.renal||''}\nMnemonic: ${d.mnemonic||''}`;
+  doCopy(t, btn, '⎘ Copy');
+}
+function copyField(text, btn) { doCopy(text, btn, '⎘ Copied'); }
+function doCopy(text, btn, orig) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Done!'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 2000);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// FLASHCARDS
+// ══════════════════════════════════════════════════════════════
+let fDeck=[], fIdx=0, fFlipped=false, fMode='brand', fGot=0, fSkip=0;
+
+function renderFlash() {
+  fDeck = [...getAllDrugs()].sort(() => Math.random()-.5);
+  fIdx=0; fFlipped=false; fGot=0; fSkip=0;
+  showFlash();
+}
+
+function showFlash() {
+  const d = fDeck[fIdx % fDeck.length];
+  if (!d) return;
+  const modes = {
+    brand: { front: d.brand, frontLbl: 'Brand Name', back: `<div class="flash-back-generic">${d.generic}</div><div class="flash-back">${d.moa}</div>`, backLbl: 'Generic + MOA' },
+    class: { front: d.generic, frontLbl: 'Generic Name', back: `<div class="flash-back" style="font-size:1.1rem;font-weight:600">${d.class}</div><div class="flash-back" style="font-size:.75rem;opacity:.8;margin-top:6px">${d.brand}</div>`, backLbl: 'Drug Class' },
+    mnem:  { front: d.mnemonic ? d.mnemonic.split('—')[0].trim() : d.indication, frontLbl: 'Memory Hook / Indication', back: `<div class="flash-back-generic">${d.brand} · ${d.generic}</div><div class="flash-back">${d.moa}</div>`, backLbl: 'Drug + MOA' },
+    dose:  { front: d.generic, frontLbl: 'Generic Name', back: `<div class="flash-back" style="font-size:.82rem;">${d.dose||'No dose info'}</div>${d.renal?`<div class="flash-back" style="font-size:.72rem;opacity:.7;margin-top:6px">⚠ Renal: ${d.renal}</div>`:''}`, backLbl: 'Dose + Renal' },
+  };
+  const m = modes[fMode] || modes.brand;
+  const prog = Math.round((fIdx / fDeck.length) * 100);
+
+  document.getElementById('content').innerHTML = `
+    <div class="flash-wrap">
+      <div class="flash-mode-btns">
+        <button class="fmode-btn${fMode==='brand'?' active':''}" onclick="setFMode('brand')">Brand→MOA</button>
+        <button class="fmode-btn${fMode==='class'?' active':''}" onclick="setFMode('class')">Generic→Class</button>
+        <button class="fmode-btn${fMode==='mnem'?' active':''}" onclick="setFMode('mnem')">Mnemonic</button>
+        <button class="fmode-btn${fMode==='dose'?' active':''}" onclick="setFMode('dose')">Dose+Renal</button>
+      </div>
+      <div class="flash-progress-bar"><div class="flash-progress-fill" style="width:${prog}%"></div></div>
+      <div class="flash-counter">${fIdx+1} / ${fDeck.length}</div>
+      <div class="flash-card${fFlipped?' flipped':''}" onclick="flipFlash()">
+        <div class="flash-side-lbl">${fFlipped ? m.backLbl : m.frontLbl}</div>
+        ${fFlipped ? m.back : `<div class="flash-front">${m.front}</div>`}
+        <div class="flash-hint-txt">${fFlipped ? 'Tap to flip back' : 'Tap to reveal →'}</div>
+      </div>
+      <div class="flash-nav">
+        <button class="flash-nav-btn skip" onclick="fSkipCard()">⟳ Skip</button>
+        <button class="flash-nav-btn${fFlipped?' correct':' primary'}" onclick="fGotIt()">
+          ${fFlipped ? '✓ Got it' : 'Flip →'}
+        </button>
+      </div>
+      <div class="flash-scores">
+        <div class="fs-box"><div class="fv" style="color:var(--green)">${fGot}</div><div class="fl">Got it</div></div>
+        <div class="fs-box"><div class="fv" style="color:var(--muted)">${fSkip}</div><div class="fl">Skipped</div></div>
+        <div class="fs-box"><div class="fv">${fDeck.length}</div><div class="fl">Cards</div></div>
+      </div>
+    </div>`;
+}
+
+function flipFlash() { fFlipped = !fFlipped; showFlash(); }
+function fGotIt() { if (!fFlipped) { fFlipped = true; showFlash(); return; } fGot++; fFlipped=false; fIdx=(fIdx+1)%fDeck.length; showFlash(); }
+function fSkipCard() { fSkip++; fFlipped=false; fIdx=(fIdx+1)%fDeck.length; showFlash(); }
+function setFMode(m) { fMode=m; fFlipped=false; showFlash(); }
+
+// ══════════════════════════════════════════════════════════════
+// QUIZ / EXAM
+// ══════════════════════════════════════════════════════════════
+let qQueue=[], qIdx=0, qCorrect=0, qWrong=0, qAnswered=false, qMode='practice', qTimer=null, qTimeLeft=0;
+
+function renderQuizMenu() {
+  document.getElementById('content').innerHTML = `
+    <div class="quiz-wrap">
+      <div class="quiz-menu-header">
+        <h2>Exam Prep Quiz 🧠</h2>
+        <p>${QUIZ.length} pharmacology questions<br>NAPLEX · PEBC · KAPS · FPGEE style</p>
+      </div>
+      <div class="quiz-mode-grid">
+        <div class="qm-card${qMode==='practice'?' active':''}" onclick="setQMode('practice')">
+          <div class="qm-icon">📚</div>
+          <div class="qm-name">Practice Mode</div>
+          <div class="qm-desc">No time pressure<br>Full explanations</div>
+        </div>
+        <div class="qm-card${qMode==='timed'?' active':''}" onclick="setQMode('timed')">
+          <div class="qm-icon">⏱</div>
+          <div class="qm-name">Timed Exam</div>
+          <div class="qm-desc">30 seconds/question<br>Simulates real exam</div>
+        </div>
+      </div>
+      <button class="start-quiz-btn" onclick="startQuiz()">Start Quiz →</button>
+      ${studyData.totalQ>0?`
+      <div style="margin-top:14px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;">
+        <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Your Stats</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
+          <div><div style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700">${studyData.totalQ}</div><div style="font-size:.6rem;color:var(--muted)">Total Qs</div></div>
+          <div><div style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;color:var(--green)">${Math.round(studyData.totalCorrect/studyData.totalQ*100)}%</div><div style="font-size:.6rem;color:var(--muted)">Accuracy</div></div>
+          <div><div style="font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700">${studyData.sessions}</div><div style="font-size:.6rem;color:var(--muted)">Sessions</div></div>
+        </div>
+      </div>`:''}`
+  ;
+}
+
+function setQMode(m) { qMode=m; renderQuizMenu(); }
+
+function startQuiz() {
+  qQueue = [...QUIZ].sort(() => Math.random()-.5);
+  qIdx=0; qCorrect=0; qWrong=0; qAnswered=false;
+  if (qTimer) clearInterval(qTimer);
+  renderQ();
+}
+
+function renderQ() {
+  if (qIdx >= qQueue.length) { showQuizDone(); return; }
+  const q = qQueue[qIdx];
+  const shuffled = q.opts.map((o,i) => ({t:o,o:i})).sort(() => Math.random()-.5);
+  const corrIdx = shuffled.findIndex(s => s.o === q.c);
+  const prog = Math.round((qIdx/qQueue.length)*100);
+  if (qMode==='timed') { qTimeLeft=30; if(qTimer) clearInterval(qTimer); startTimer(corrIdx); }
+
+  document.getElementById('content').innerHTML = `
+    <div class="quiz-wrap">
+      <div class="quiz-topbar">
+        <div class="qtop-box"><div class="qtop-val green">${qCorrect}</div><div class="qtop-lbl">Correct</div></div>
+        ${qMode==='timed'
+          ? `<div class="qtop-box timer-box-main" style="flex:1"><div class="qtop-val" id="timerVal">${qTimeLeft}</div><div class="qtop-lbl">seconds</div></div>`
+          : `<div class="qtop-box" style="flex:1"><div class="qtop-val" style="font-size:.9rem">Q${qIdx+1}/${qQueue.length}</div><div class="qtop-lbl">Progress</div></div>`}
+        <div class="qtop-box"><div class="qtop-val red">${qWrong}</div><div class="qtop-lbl">Wrong</div></div>
+      </div>
+      <div class="q-progress-bar"><div class="q-progress-fill" style="width:${prog}%"></div></div>
+      <div class="quiz-card">
+        <div class="q-cat">Question ${qIdx+1} of ${qQueue.length}</div>
+        <div class="q-txt">${q.q}</div>
+        <div class="q-opts">
+          ${shuffled.map((s,i)=>`<button class="q-opt" id="qo${i}" onclick="answerQ(${i},${corrIdx},'${escQ(q.exp)}')">${s.t}</button>`).join('')}
+        </div>
+        <div class="q-feedback" id="qfb"></div>
+        <button class="q-next" id="qnext" onclick="nextQ()">Next Question →</button>
+      </div>
+    </div>`;
+}
+
+function startTimer(corrIdx) {
+  qTimer = setInterval(() => {
+    qTimeLeft--;
+    const tv = document.getElementById('timerVal');
+    if (tv) { tv.textContent = qTimeLeft; tv.className = 'qtop-val' + (qTimeLeft<=10?' urgent':''); }
+    if (qTimeLeft <= 0) { clearInterval(qTimer); autoFail(corrIdx); }
+  }, 1000);
+}
+
+function autoFail(corrIdx) {
+  if (qAnswered) return; qAnswered=true; qWrong++;
+  document.querySelectorAll('.q-opt').forEach((b,i) => { b.disabled=true; if(i===corrIdx) b.classList.add('correct'); });
+  const fb = document.getElementById('qfb'); fb.className='q-feedback show bad'; fb.innerHTML=`⏱ Time's up! — ${qQueue[qIdx].exp}`;
+  document.getElementById('qnext').classList.add('show');
+}
+
+function answerQ(chosen, correct, exp) {
+  if (qAnswered) return; qAnswered=true; if(qTimer) clearInterval(qTimer);
+  document.querySelectorAll('.q-opt').forEach((b,i) => { b.disabled=true; if(i===correct) b.classList.add('correct'); if(i===chosen&&chosen!==correct) b.classList.add('wrong'); });
+  const fb = document.getElementById('qfb');
+  if (chosen===correct) { qCorrect++; fb.className='q-feedback show ok'; fb.innerHTML=`✓ Correct! — ${exp}`; }
+  else { qWrong++; fb.className='q-feedback show bad'; fb.innerHTML=`✗ Incorrect. — ${exp}`; }
+  document.getElementById('qnext').classList.add('show');
+}
+
+function nextQ() { qIdx++; qAnswered=false; renderQ(); }
+function escQ(s) { return (s||'').replace(/'/g,"\\'").replace(/\n/g,' '); }
+
+function showQuizDone() {
+  if(qTimer) clearInterval(qTimer);
+  studyData.totalQ += qQueue.length; studyData.totalCorrect += qCorrect; persist();
+  const pct = Math.round(qCorrect/qQueue.length*100);
+  const grade = pct>=90?'🏆':pct>=75?'📚':pct>=55?'💪':'📖';
+  const msg = pct>=90?'Outstanding! Exam-ready performance.':pct>=75?'Strong result — review the ones you missed.':pct>=55?'Good effort — keep practising daily.':'Review the drug library and try again.';
+  document.getElementById('content').innerHTML = `
+    <div class="quiz-wrap"><div class="quiz-done-wrap">
+      <div class="done-circle">${pct}%</div>
+      <h2>${grade} ${pct>=90?'Excellent!':pct>=75?'Well done!':'Keep going!'}</h2>
+      <p>${qCorrect} of ${qQueue.length} correct<br>${msg}</p>
+      <div>
+        <button class="done-btn" onclick="startQuiz()">Retry Quiz</button>
+        <button class="done-btn outline" onclick="renderQuizMenu()">← Menu</button>
+      </div>
+    </div></div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// INTERACTION CHECKER
+// ══════════════════════════════════════════════════════════════
+let ixInputs = ['', ''];
+
+function renderIx() {
+  document.getElementById('content').innerHTML = `
+    <div class="ix-wrap">
+      <div class="ix-title">⚡ Drug Interaction Checker</div>
+      <p class="ix-sub">Enter drug names (brand or generic) to check for known interactions. ${INTERACTIONS.length} interactions in database.</p>
+      <div class="ix-inputs" id="ixInputs">
+        ${ixInputs.map((v,i)=>`
+          <div class="ix-input-row">
+            <input class="ix-input" placeholder="Drug ${i+1} (e.g. warfarin, aspirin…)" value="${v}" oninput="ixInputs[${i}]=this.value">
+            ${i>=2?`<button class="ix-remove" onclick="removeIxInput(${i})">✕</button>`:'<div style="width:30px"></div>'}
+          </div>`).join('')}
+      </div>
+      <button class="add-drug-input-btn" onclick="addIxInput()">+ Add another drug</button>
+      <button class="check-ix-btn" onclick="checkInteractions()">Check Interactions</button>
+      <div id="ixResults"></div>
+    </div>`;
+}
+
+function addIxInput() { ixInputs.push(''); renderIx(); }
+function removeIxInput(i) { ixInputs.splice(i,1); renderIx(); }
+
+function checkInteractions() {
+  const drugs = ixInputs.map(v => v.trim().toLowerCase()).filter(Boolean);
+  if (drugs.length < 2) { document.getElementById('ixResults').innerHTML = `<p style="font-size:.78rem;color:var(--red)">Please enter at least 2 drugs to check.</p>`; return; }
+  const results = [];
+  for (let i = 0; i < drugs.length; i++) {
+    for (let j = i+1; j < drugs.length; j++) {
+      const da = drugs[i], db = drugs[j];
+      const found = INTERACTIONS.filter(ix => {
+        const matchA = da.includes(ix.a) || ix.a.includes(da.split(' ')[0]);
+        const matchB = db.includes(ix.b) || ix.b.includes(db.split(' ')[0]);
+        const matchAB = da.includes(ix.b) || ix.b.includes(da.split(' ')[0]);
+        const matchBA = db.includes(ix.a) || ix.a.includes(db.split(' ')[0]);
+        return (matchA && matchB) || (matchAB && matchBA);
+      });
+      if (found.length) { found.forEach(f => results.push({pair:[drugs[i],drugs[j]],ix:f})); }
+      else {
+        // Check for class-level interactions
+        const classMatch = INTERACTIONS.filter(ix => {
+          const terms = [da,db];
+          return terms.some(t => t.includes(ix.a.split(' ')[0])) && terms.some(t => t.includes(ix.b.split(' ')[0]));
+        });
+        if (!classMatch.length) results.push({pair:[drugs[i],drugs[j]],none:true});
+      }
+    }
+  }
+  const sevOrder = {major:0,moderate:1,minor:2,none:3};
+  results.sort((a,b) => sevOrder[a.ix?.severity||'none'] - sevOrder[b.ix?.severity||'none']);
+
+  document.getElementById('ixResults').innerHTML = results.map(r => {
+    if (r.none) return `<div class="ix-result-card">
+      <div class="ix-pair">${r.pair[0]} + ${r.pair[1]}</div>
+      <span class="ix-severity none">✓ No known interaction</span>
+      <div class="ix-desc">No significant interaction found in this database. Always cross-check with additional study references.</div>
+    </div>`;
+    return `<div class="ix-result-card">
+      <div class="ix-pair">${r.pair[0]} + ${r.pair[1]}</div>
+      <span class="ix-severity ${r.ix.severity}">${r.ix.severity==='major'?'⚠ Major':r.ix.severity==='moderate'?'▲ Moderate':'↓ Minor'}</span>
+      <div class="ix-desc">${r.ix.desc}</div>
+      <div class="ix-mgmt">📋 Management: ${r.ix.mgmt}</div>
+    </div>`;
+  }).join('') || `<div class="ix-result-card"><span class="ix-severity none">✓ No interactions found</span><div class="ix-desc">No known interactions in database for these drug combinations.</div></div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════════════════════════════
+// ── ADMIN PASSWORD PROTECTION ──
+const ADMIN_PASSWORD = 'RxRef2025';  // ← CHANGE THIS TO YOUR OWN PASSWORD
+let adminUnlocked = false;
+
+function renderAdminLock() {
+  document.getElementById('content').innerHTML = `
+    <div class="admin-lock">
+      <div class="lock-icon">🔐</div>
+      <h2>Admin Access</h2>
+      <p>This area is password protected.<br>Only the app owner can add or edit drugs.</p>
+      <input type="password" id="adminPwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter') checkAdminPw()">
+      <button class="admin-lock-btn" onclick="checkAdminPw()">Unlock Admin Panel</button>
+      <div class="admin-lock-err" id="adminErr">❌ Incorrect password. Try again.</div>
+      <div class="admin-hint">💡 Contact the app owner for access</div>
+    </div>`;
+  setTimeout(() => document.getElementById('adminPwInput')?.focus(), 100);
+}
+
+function checkAdminPw() {
+  const input = document.getElementById('adminPwInput');
+  const err = document.getElementById('adminErr');
+  if (input.value === ADMIN_PASSWORD) {
+    adminUnlocked = true;
+    renderAdmin();
   } else {
-    alert("Wrong ❌");
+    input.value = '';
+    err.classList.add('show');
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      err.classList.remove('show');
+      input.style.borderColor = '';
+    }, 3000);
   }
 }
 
+function renderAdmin(editIdx) {
+  if (!adminUnlocked) { renderAdminLock(); return; }
+  const isEdit = editIdx !== undefined;
+  const d = isEdit ? customDrugs[editIdx] : {};
+  const classes = [...new Set(getAllDrugs().map(x=>x.class))].sort();
+  document.getElementById('content').innerHTML = `
+    <div class="admin-stats">
+      <div class="ast"><strong>${DRUGS.length}</strong><span>Built-in</span></div>
+      <div class="ast"><strong>${customDrugs.length}</strong><span>Custom</span></div>
+      <div class="ast"><strong>${getAllDrugs().length}</strong><span>Total</span></div>
+    </div>
+    <div class="admin-form">
+      <div class="af-title">
+        ${isEdit ? '✏️ Edit Drug' : '➕ Add New Drug'}
+        ${isEdit ? `<button class="af-cancel" onclick="renderAdmin()">Cancel</button>` : ''}
+      </div>
+      <div class="af-row-2">
+        <div><div class="af-lbl">Brand Name *</div><input class="af-input" id="af-brand" placeholder="e.g. Norvasc" value="${d.brand||''}"></div>
+        <div><div class="af-lbl">Generic Name *</div><input class="af-input" id="af-generic" placeholder="e.g. amlodipine" value="${d.generic||''}"></div>
+      </div>
+      <div class="af-row">
+        <div class="af-lbl">Drug Class *</div>
+        <select class="af-select" id="af-class"><option value="">— Select existing —</option>${classes.map(c=>`<option value="${c}"${d.class===c?' selected':''}>${c}</option>`).join('')}</select>
+        <input class="af-input" id="af-class-new" placeholder="Or type new class…" style="margin-top:6px" value="${d.class&&!classes.includes(d.class)?d.class:''}">
+      </div>
+      <div class="af-row"><div class="af-lbl">Mechanism of Action *</div><textarea class="af-textarea" id="af-moa" placeholder="e.g. Inhibits HMG-CoA reductase → ↓ cholesterol">${d.moa||''}</textarea></div>
+      <div class="af-row"><div class="af-lbl">Indication</div><textarea class="af-textarea" id="af-ind" placeholder="e.g. HTN, Angina">${d.indication||''}</textarea></div>
+      <div class="af-row"><div class="af-lbl">Side Effects / ADRs</div><textarea class="af-textarea" id="af-side" placeholder="e.g. Peripheral edema, headache">${d.side||''}</textarea></div>
+      <div class="af-row-2">
+        <div><div class="af-lbl">Dosing</div><input class="af-input" id="af-dose" placeholder="e.g. 5–10mg OD" value="${d.dose||''}"></div>
+        <div><div class="af-lbl">Renal Adjustment</div><input class="af-input" id="af-renal" placeholder="e.g. Avoid CrCl <30" value="${d.renal||''}"></div>
+      </div>
+      <div class="af-row"><div class="af-lbl">Mnemonic / Memory Tip</div><input class="af-input" id="af-mem" placeholder="e.g. NORVASC = NO real cardiac effect" value="${d.mnemonic||''}"></div>
+      <div class="af-error" id="af-err">Please fill in all required (*) fields.</div>
+      <button class="af-submit" onclick="${isEdit?`saveDrug(${editIdx})`:'addDrug()'}">${isEdit?'💾 Save Changes':'➕ Add Drug'}</button>
+    </div>
+    <div class="custom-list-lbl">Custom Drugs (${customDrugs.length})</div>
+    ${customDrugs.length ? customDrugs.map((cd,i)=>`
+      <div class="cdi">
+        <div>
+          <div class="cdi-brand">${cd.brand}</div>
+          <div class="cdi-generic">${cd.generic}</div>
+          <div class="cdi-class">${cd.class}</div>
+        </div>
+        <div class="cdi-btns">
+          <button class="cdi-btn edit" onclick="renderAdmin(${i})">✏️</button>
+          <button class="cdi-btn del" onclick="promptDel(${i})">🗑</button>
+        </div>
+      </div>`).join('') : `<div class="empty-state" style="padding:28px 0"><div class="es-icon">➕</div><p>No custom drugs yet.<br>Use the form above.</p></div>`}
+  `;
+  if (isEdit) editingIdx = editIdx;
+}
+
+function getForm() {
+  return {
+    brand: document.getElementById('af-brand').value.trim(),
+    generic: document.getElementById('af-generic').value.trim(),
+    class: (document.getElementById('af-class-new').value.trim() || document.getElementById('af-class').value.trim()),
+    moa: document.getElementById('af-moa').value.trim(),
+    indication: document.getElementById('af-ind').value.trim(),
+    side: document.getElementById('af-side').value.trim(),
+    dose: document.getElementById('af-dose').value.trim(),
+    renal: document.getElementById('af-renal').value.trim(),
+    mnemonic: document.getElementById('af-mem').value.trim(),
+  };
+}
+
+function addDrug() {
+  const d = getForm();
+  if (!d.brand||!d.generic||!d.class||!d.moa) { document.getElementById('af-err').classList.add('show'); return; }
+  customDrugs.push(d); persist(); buildChips(); renderAdmin();
+}
+
+function saveDrug(i) {
+  const d = getForm();
+  if (!d.brand||!d.generic||!d.class||!d.moa) { document.getElementById('af-err').classList.add('show'); return; }
+  customDrugs[i]=d; persist(); buildChips(); renderAdmin();
+}
+
+function editDrug(i) { showTab('admin'); setTimeout(() => renderAdmin(i), 50); }
+
+function promptDel(i) {
+  pendingDel = i;
+  document.getElementById('confirmMsg').textContent = `Delete "${customDrugs[i].brand}" (${customDrugs[i].generic})?`;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function confirmDeleteDrug() {
+  if (pendingDel === null) return;
+  customDrugs.splice(pendingDel,1); pendingDel=null; persist(); buildChips();
+  closeOverlay('confirmOverlay');
+  if (currentTab==='admin') renderAdmin(); else renderDrugs();
+}
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+
+// ══════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════
+buildChips();
+updateBmBadge();
+showTab('home');
 </script>
 
+<div class="disclaimer">📚 For exam study purposes only · Not intended for clinical use · Always verify with authoritative references · RxRef Pro v4</div>
 </body>
 </html>
-<head>
-  <title>RxRefPro</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-  <!-- your app content -->
-
-  <script src="data.js"></script>
-  <script src="app.js"></script>
-</body>
