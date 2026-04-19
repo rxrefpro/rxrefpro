@@ -1,77 +1,64 @@
-:::writing{variant=“standard” id=“20004”}
 function showTab(tab){
-document.querySelectorAll(’.tab’).forEach(t=>t.classList.remove(‘active’));
-document.getElementById(tab).classList.add(‘active’);
+ document.querySelectorAll('.container').forEach(e=>e.style.display='none');
+ document.getElementById(tab).style.display='block';
 }
 
-function greeting(){
+// Greeting
 let h=new Date().getHours();
-document.getElementById(“greeting”).innerText=
-h<12?“Good Morning”:h<18?“Good Afternoon”:“Good Evening”;
-}
-greeting();
+document.getElementById("greeting").innerText=
+ h<12?"Good Morning":h<18?"Good Afternoon":"Good Evening";
 
-function renderDrugs(){
-let val=document.getElementById(“search”).value?.toLowerCase()||””;
-let list=document.getElementById(“drugList”);
-list.innerHTML=””;
-DRUGS.filter(d=>d.name.toLowerCase().includes(val)).forEach(d=>{
-list.innerHTML+=`
-<div class="drug">
-<b>${d.name}</b><br>
-Class: ${d.class}<br>
-MOA: ${d.moa}<br>
-Use: ${d.use}
-</div>`;
-});
+// Drugs
+function loadDrugs(list){
+ let html="";
+ list.forEach(d=>{
+   html+=`<div class="card">
+   <b>${d.name}</b><br>
+   ${d.class}<br>${d.use}<br>${d.moa}
+   </div>`;
+ });
+ document.getElementById("drugList").innerHTML=html;
 }
-renderDrugs();
-let caseIndex=0;
-function nextCase(){
-let c=CASES[caseIndex%CASES.length];
-document.getElementById(“caseBox”).innerText=c.q+” → “+c.a;
-caseIndex++;
-}
-nextCase();
+loadDrugs(drugs);
 
-let flip=false;
-function flipCard(){
-let d=DRUGS[Math.floor(Math.random()*DRUGS.length)];
-document.getElementById(“flashcard”).innerText=
-flip? “Tap to Start” : d.name+” → “+d.moa;
-flip=!flip;
+function searchDrug(val){
+ let f=drugs.filter(d=>d.name.toLowerCase().includes(val.toLowerCase()));
+ loadDrugs(f);
 }
 
-let qIndex=0;
-function loadQuiz(){
-let q=CASES[qIndex%CASES.length];
-document.getElementById(“question”).innerText=q.q;
-let optBox=document.getElementById(“options”);
-optBox.innerHTML=””;
-[“Statin”,“Metformin”,“ACE inhibitor”].forEach(opt=>{
-let btn=document.createElement(“button”);
-btn.innerText=opt;
-btn.onclick=()=>{
-document.getElementById(“explanation”).innerText=
-opt===q.a?“Correct”:“Review concept”;
-};
-optBox.appendChild(btn);
-});
+// Flashcards
+let i=0;
+function nextFlash(){
+ let d=drugs[i%drugs.length];
+ document.getElementById("flashcard").innerText=
+   `${d.name} → ${d.moa}`;
+ i++;
 }
-loadQuiz();
+nextFlash();
 
+// Quiz
+let score=0,total=0;
+const q={q:"Statins MOA?",a:"HMG-CoA inhibitor"};
+document.getElementById("question").innerText=q.q;
+
+function answer(ans){
+ total++;
+ if(ans==="a"){score++; alert("Correct");}
+ else alert("Wrong");
+ document.getElementById("accuracy").innerText=Math.round(score/total*100);
+}
+
+// Interaction
 function checkInteraction(){
-let input=document.getElementById(“intInput”).value.toLowerCase();
-let found=INTERACTIONS.find(i=>i.drugs.every(d=>input.includes(d)));
-document.getElementById(“intResult”).innerText=
-found?found.effect:“No major interaction”;
+ let a=document.getElementById("int1").value.toLowerCase();
+ let b=document.getElementById("int2").value.toLowerCase();
+ let res=interactions.find(x=>
+   (x.d1===a && x.d2===b)||(x.d1===b && x.d2===a));
+ document.getElementById("interactionResult").innerText=
+   res?res.result:"No major interaction";
 }
 
-function loadAntidotes(){
-let div=document.getElementById(“antidoteList”);
-ANTIDOTES.forEach(a=>{
-div.innerHTML+=<div>${a.drug} → ${a.antidote}</div>;
-});
-}
-loadAntidotes();
-:::
+// Antidotes
+let html="";
+antidotes.forEach(a=>html+=`<div class="card">${a}</div>`);
+document.getElementById("antidoteList").innerHTML=html;
