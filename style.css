@@ -1,48 +1,92 @@
 body {
   margin:0;
   font-family: 'Segoe UI', sans-serif;
-  background:linear-gradient(135deg,#0f172a,#020617);
-  color:white;
+  background: radial-gradient(circle at top, #0f172a, #020617 80%);
+  color:#e2e8f0;
 }
 
+/* HEADER */
 header {
   text-align:center;
-  padding:20px;
-  font-size:24px;
-  background:linear-gradient(90deg,#2563eb,#06b6d4);
+  padding:25px;
+  font-size:26px;
+  font-weight:600;
+  background: linear-gradient(120deg, #3b82f6, #06b6d4, #9333ea);
+  color:white;
+  letter-spacing:1px;
 }
 
+/* NAVBAR */
 nav {
   display:flex;
   overflow:auto;
-  background:#020617;
+  background: rgba(15,23,42,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
 nav button {
   flex:1;
-  padding:10px;
+  padding:12px;
   background:none;
   border:none;
+  color:#cbd5f5;
+  font-size:14px;
+  transition:0.3s;
+}
+
+nav button:hover {
   color:white;
+  transform:scale(1.05);
 }
 
+/* CONTAINER */
 .container {
-  padding:15px;
+  padding:20px;
 }
 
+/* CARDS (GLASS EFFECT) */
 .card {
-  background:rgba(255,255,255,0.05);
-  padding:15px;
-  margin:10px 0;
-  border-radius:12px;
-  backdrop-filter: blur(10px);
+  background: linear-gradient(145deg, rgba(30,41,59,0.6), rgba(2,6,23,0.8));
+  padding:18px;
+  margin:12px 0;
+  border-radius:16px;
+  backdrop-filter: blur(14px);
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  transition:0.3s;
 }
 
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+}
+
+/* SEARCH */
 .search {
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:10px 0;
-  border-radius:8px;
+  border-radius:12px;
   border:none;
+  background:#020617;
+  color:white;
+  outline:none;
 }
 
+/* BUTTONS */
+button {
+  margin:5px;
+  padding:10px 14px;
+  border:none;
+  border-radius:10px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4);
+  color:white;
+  font-weight:500;
+}
+
+/* HEADINGS */
+h2 {
+  font-size:28px;
+  margin-bottom:10px;
+}
