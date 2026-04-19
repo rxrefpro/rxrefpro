@@ -1,44 +1,19 @@
-const DRUGS = [
-{
-name:"Metformin",
-class:"Biguanide",
-moa:"Decreases hepatic glucose production",
-use:"Type 2 Diabetes"
-},
-{
-name:"Atorvastatin",
-class:"Statin",
-moa:"Inhibits HMG-CoA reductase",
-use:"Hyperlipidemia"
-},
-{
-name:"Lisinopril",
-class:"ACE inhibitor",
-moa:"Blocks conversion of angiotensin I to II",
-use:"Hypertension"
-}
+const drugs = [
+ {name:"Metformin", class:"Biguanide", use:"Diabetes", moa:"↓ hepatic glucose"},
+ {name:"Atorvastatin", class:"Statin", use:"Cholesterol", moa:"HMG-CoA reductase inhibitor"},
+ {name:"Amlodipine", class:"CCB", use:"Hypertension", moa:"↓ calcium influx"},
+ {name:"Salbutamol", class:"SABA", use:"Asthma", moa:"β2 agonist bronchodilation"}
 ];
 
-const CASES = [
-{
-q:"Patient with high LDL — best drug?",
-a:"Statin"
-},
-{
-q:"First-line for type 2 diabetes?",
-a:"Metformin"
-}
+const antidotes = [
+ "Paracetamol → N-acetylcysteine",
+ "Opioid → Naloxone",
+ "Benzodiazepine → Flumazenil",
+ "Heparin → Protamine",
+ "Warfarin → Vitamin K"
 ];
 
-const ANTIDOTES = [
-{drug:"Paracetamol", antidote:"N-acetylcysteine"},
-{drug:"Opioids", antidote:"Naloxone"},
-{drug:"Warfarin", antidote:"Vitamin K"}
-];
-
-const INTERACTIONS = [
-{
-drugs:["warfarin","nsaids"],
-effect:"⚠️ Major bleeding risk"
-}
+const interactions = [
+ {d1:"warfarin", d2:"aspirin", result:"Major bleeding risk"},
+ {d1:"ace inhibitor", d2:"spironolactone", result:"Hyperkalemia risk"}
 ];
